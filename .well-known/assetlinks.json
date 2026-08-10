@@ -1,0 +1,10 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "com.galio.app",
+    "sha256_cert_fingerprints": [
+      "19:D1:F9:2F:D0:13:AA:2A:B1:2C:FD:67:21:20:85:66:7E:E9:80:A7:C6:20:0F:D8:CD:78:C5:6A:6A:FB:7C:79"
+    ]
+  }
+}]
