@@ -1,0 +1,664 @@
+<title>Face Value</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Mono:wght@400;500&family=Familjen+Grotesk:wght@500;600;700&family=Karla:wght@400;600&display=swap" />
+<style>
+:root{
+  --bg:#EFEFF4; --surface:#FFFFFF; --surface-2:#E7E7F0; --surface-3:#DBDBE8;
+  --ink:#15151F; --ink-2:#4C4C61; --ink-3:#7E7E96;
+  --line:#D6D6E4; --line-2:#C2C2D6;
+  --accent:#3D3BD6; --accent-2:#2A28A8; --accent-soft:#E0E0FA;
+  --hot:#D8442D; --hot-soft:#FBE2DD;
+  --gold:#A9761F; --gold-soft:#F7ECD4;
+  --teal:#0D7C66; --teal-soft:#D8EFE9;
+  --shadow:0 1px 2px rgba(21,21,31,.07),0 14px 30px -14px rgba(21,21,31,.26);
+  --shadow-lift:0 3px 6px rgba(21,21,31,.1),0 34px 60px -22px rgba(21,21,31,.4);
+  --display:"Familjen Grotesk",system-ui,sans-serif;
+  --body:"Karla",system-ui,sans-serif;
+  --mono:"DM Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0E0E16; --surface:#181824; --surface-2:#20202F; --surface-3:#2A2A3C;
+    --ink:#ECECF4; --ink-2:#A7A7BE; --ink-3:#75758E;
+    --line:#2B2B3C; --line-2:#3A3A4F;
+    --accent:#8785FF; --accent-2:#B4B3FF; --accent-soft:#22214A;
+    --hot:#FF7C64; --hot-soft:#3A1912;
+    --gold:#EBC172; --gold-soft:#352814;
+    --teal:#4ECFB0; --teal-soft:#0F3129;
+    --shadow:0 1px 2px rgba(0,0,0,.5),0 14px 30px -14px rgba(0,0,0,.8);
+    --shadow-lift:0 3px 6px rgba(0,0,0,.6),0 34px 60px -22px rgba(0,0,0,.9);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0E0E16; --surface:#181824; --surface-2:#20202F; --surface-3:#2A2A3C;
+  --ink:#ECECF4; --ink-2:#A7A7BE; --ink-3:#75758E;
+  --line:#2B2B3C; --line-2:#3A3A4F;
+  --accent:#8785FF; --accent-2:#B4B3FF; --accent-soft:#22214A;
+  --hot:#FF7C64; --hot-soft:#3A1912;
+  --gold:#EBC172; --gold-soft:#352814;
+  --teal:#4ECFB0; --teal-soft:#0F3129;
+  --shadow:0 1px 2px rgba(0,0,0,.5),0 14px 30px -14px rgba(0,0,0,.8);
+  --shadow-lift:0 3px 6px rgba(0,0,0,.6),0 34px 60px -22px rgba(0,0,0,.9);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{margin:0; background:var(--bg); color:var(--ink); font-family:var(--body); font-size:15px; line-height:1.5; -webkit-font-smoothing:antialiased}
+h1,h2,h3{font-family:var(--display); margin:0; text-wrap:balance; letter-spacing:-.02em}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--accent); outline-offset:3px; border-radius:5px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important; transition-duration:.01ms!important}}
+
+.label{font-family:var(--mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase; color:var(--ink-3)}
+.wrap{max-width:1240px; margin:0 auto; padding-inline:20px; padding-block:0 44px}
+
+/* ---- top ---- */
+.topbar{display:flex; align-items:center; gap:14px; flex-wrap:wrap; padding-block:20px 16px; border-bottom:1px solid var(--line); margin-bottom:24px}
+.brand{margin-right:auto; display:flex; align-items:baseline; gap:11px; flex-wrap:wrap}
+.brand h1{font-size:25px; font-weight:700}
+.brand h1 em{font-style:normal; position:relative}
+.brand h1 em::after{content:""; position:absolute; left:-2px; right:-2px; top:46%; height:3px; background:var(--hot); transform:rotate(-2deg)}
+.brand .tag{font-size:13.5px; color:var(--ink-2)}
+.pill{font-family:var(--mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase; padding:4px 9px; border-radius:999px; white-space:nowrap; color:var(--gold); background:var(--gold-soft); border:1px solid color-mix(in srgb,var(--gold) 34%,transparent)}
+.ghost{background:transparent; border:1px solid var(--line-2); color:var(--ink-2); padding:6px 12px; border-radius:8px; font-size:13px}
+.ghost:hover{border-color:var(--accent); color:var(--accent)}
+
+.grid{display:grid; grid-template-columns:238px minmax(0,1fr) 268px; gap:24px; align-items:start}
+.panel{background:var(--surface); border:1px solid var(--line); border-radius:12px; padding:15px; margin-bottom:14px}
+.panel:last-child{margin-bottom:0}
+.panel > .label{display:block; margin-bottom:11px}
+
+/* ---- left: progress ---- */
+.lvl{display:flex; align-items:baseline; gap:9px; margin-bottom:9px}
+.lvl b{font-family:var(--display); font-size:30px; font-weight:700; line-height:1}
+.lvl span{font-size:13px; color:var(--ink-2)}
+.xpbar{height:7px; border-radius:4px; background:var(--surface-3); overflow:hidden}
+.xpbar i{display:block; height:100%; background:linear-gradient(90deg,var(--accent),var(--accent-2)); transition:width .5s cubic-bezier(.2,.8,.3,1)}
+.xpnote{margin:7px 0 0; font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+
+.streak{display:flex; align-items:center; gap:10px; margin-top:14px; padding-top:13px; border-top:1px solid var(--line)}
+.flame{width:32px; height:32px; flex:none; border-radius:9px; background:var(--hot-soft); color:var(--hot); display:grid; place-items:center; font-size:16px}
+.streak b{font-family:var(--display); font-size:17px; display:block; line-height:1.15}
+.streak span{font-size:12px; color:var(--ink-3)}
+
+.setrow{display:grid; grid-template-columns:auto 1fr auto; gap:4px 9px; align-items:center; margin-bottom:10px}
+.setrow:last-child{margin-bottom:0}
+.setrow .sq{width:22px; height:22px; border-radius:6px; display:grid; place-items:center; font-family:var(--mono); font-size:10px; background:var(--surface-2); color:var(--ink-2); border:1px solid var(--line-2)}
+.setrow .nm{font-size:13.5px}
+.setrow .ct{font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+.setrow .tr{grid-column:2/-1; height:4px; border-radius:3px; background:var(--surface-3); overflow:hidden}
+.setrow .tr i{display:block; height:100%; background:var(--accent); transition:width .4s ease}
+.setrow.done .tr i{background:var(--gold)}
+
+/* ---- deck ---- */
+.deckhead{display:flex; align-items:baseline; gap:12px; margin-bottom:12px; flex-wrap:wrap}
+.deckhead h2{font-size:18px; font-weight:600}
+.deckhead .label{margin-left:auto}
+.stage{position:relative; height:556px; max-width:404px; margin:0 auto}
+
+.card{
+  position:absolute; inset:0; border-radius:18px; padding:18px;
+  background:var(--surface); border:1px solid var(--line);
+  box-shadow:var(--shadow); display:flex; flex-direction:column; overflow:hidden;
+}
+.card[data-depth="0"]{box-shadow:var(--shadow-lift); cursor:grab; touch-action:pan-y}
+.card[data-depth="0"].drag{cursor:grabbing; transition:none}
+.card[data-depth="1"]{transform:translateY(12px) scale(.966); z-index:-1}
+.card[data-depth="2"]{transform:translateY(23px) scale(.932); z-index:-2}
+.card.settle{transition:transform .3s cubic-bezier(.2,.8,.3,1)}
+.card.gone{transition:transform .36s ease-in,opacity .36s ease-in; opacity:0}
+.card.r-rare{border-color:color-mix(in srgb,var(--accent) 46%,var(--line))}
+.card.r-legendary{border-color:color-mix(in srgb,var(--gold) 58%,var(--line))}
+.foil{position:absolute; inset:0; pointer-events:none; opacity:0;
+  background:linear-gradient(105deg,transparent 32%,color-mix(in srgb,var(--gold) 40%,transparent) 46%,transparent 60%);
+  background-size:260% 100%; animation:sweep 4.5s ease-in-out infinite}
+.card.r-rare .foil{opacity:.5; background-image:linear-gradient(105deg,transparent 32%,color-mix(in srgb,var(--accent) 32%,transparent) 46%,transparent 60%)}
+.card.r-legendary .foil{opacity:.85}
+@keyframes sweep{0%,100%{background-position:170% 0}50%{background-position:-70% 0}}
+
+.cardtop{display:flex; align-items:center; gap:8px}
+.rar{font-family:var(--mono); font-size:9.5px; letter-spacing:.12em; text-transform:uppercase; padding:3px 7px; border-radius:5px; border:1px solid}
+.rar.common{color:var(--ink-3); border-color:var(--line-2); background:var(--surface-2)}
+.rar.uncommon{color:var(--teal); border-color:color-mix(in srgb,var(--teal) 40%,transparent); background:var(--teal-soft)}
+.rar.rare{color:var(--accent); border-color:color-mix(in srgb,var(--accent) 42%,transparent); background:var(--accent-soft)}
+.rar.legendary{color:var(--gold); border-color:color-mix(in srgb,var(--gold) 46%,transparent); background:var(--gold-soft)}
+.cardtop .no{margin-left:auto; font-family:var(--mono); font-size:11px; color:var(--ink-3)}
+
+.masked{display:flex; align-items:center; gap:12px; margin-top:15px}
+.mug{width:60px; height:60px; flex:none; border-radius:13px; overflow:hidden; border:1px solid var(--line-2); position:relative; background:var(--surface-2)}
+.mug canvas{display:block; width:100%; height:100%; filter:blur(7px) saturate(.65)}
+.mug::after{content:"?"; position:absolute; inset:0; display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:24px; color:var(--ink-2); opacity:.72}
+.masked .redact{flex:1; min-width:0}
+.bar-redact{height:13px; border-radius:3px; background:var(--ink); opacity:.82; margin-bottom:6px}
+.bar-redact.short{width:56%}
+.masked .note{font-family:var(--mono); font-size:10px; letter-spacing:.07em; text-transform:uppercase; color:var(--ink-3)}
+
+.card h3{font-size:26px; font-weight:700; line-height:1.08; margin-top:16px}
+.role{font-size:14px; color:var(--ink-2); margin-top:5px}
+.place{font-family:var(--mono); font-size:11.5px; color:var(--ink-3); margin-top:3px}
+
+.signals{list-style:none; padding:0; margin:16px 0 0; display:flex; flex-direction:column; gap:8px}
+.signals li{display:flex; gap:9px; font-size:14px; line-height:1.36; color:var(--ink-2)}
+.signals li::before{content:""; width:5px; height:5px; border-radius:50%; background:var(--accent); flex:none; margin-top:7px}
+
+.swap{display:grid; grid-template-columns:1fr 1fr; gap:1px; margin-top:auto; background:var(--line); border:1px solid var(--line); border-radius:11px; overflow:hidden}
+.swap div{background:var(--surface-2); padding:10px 11px}
+.swap .label{display:block; margin-bottom:3px}
+.swap p{margin:0; font-size:13.5px; line-height:1.35}
+
+.stamp{position:absolute; top:22px; font-family:var(--display); font-weight:700; font-size:23px; letter-spacing:.04em; padding:5px 12px; border:3px solid; border-radius:9px; opacity:0; pointer-events:none; z-index:3}
+.stamp.yes{left:20px; transform:rotate(-10deg); color:var(--accent); border-color:var(--accent); background:var(--surface)}
+.stamp.no{right:20px; transform:rotate(10deg); color:var(--hot); border-color:var(--hot); background:var(--surface)}
+
+.empty{position:absolute; inset:0; border:1px dashed var(--line-2); border-radius:18px; display:grid; place-content:center; text-align:center; gap:9px; padding:30px}
+.empty h3{font-size:19px}
+.empty p{margin:0; color:var(--ink-2); font-size:14px; max-width:32ch}
+
+.acts{display:flex; gap:10px; justify-content:center; margin-top:18px}
+.act{border-radius:11px; border:1px solid var(--line-2); background:var(--surface); padding:12px 22px; font-family:var(--display); font-weight:600; font-size:15px; transition:transform .12s ease}
+.act:hover:not(:disabled){transform:translateY(-2px)}
+.act:disabled{opacity:.4; cursor:not-allowed}
+.act.no{color:var(--hot); border-color:color-mix(in srgb,var(--hot) 38%,var(--line-2))}
+.act.no:hover:not(:disabled){background:var(--hot-soft)}
+.act.yes{color:#fff; background:var(--accent); border-color:var(--accent)}
+.act.yes:hover:not(:disabled){background:var(--accent-2)}
+.act.undo{color:var(--ink-2)}
+
+/* ---- right ---- */
+.feed{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:10px; overflow:hidden}
+.fitem{display:flex; gap:9px; align-items:center; background:var(--surface); padding:9px 10px}
+.fitem .av{width:27px; height:27px; flex:none; border-radius:8px; display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:11px; background:var(--accent-soft); color:var(--accent)}
+.fitem .tx{min-width:0}
+.fitem .tx strong{display:block; font-size:13.5px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.fitem .tx span{font-size:11.5px; color:var(--ink-3)}
+.fitem .xp{margin-left:auto; font-family:var(--mono); font-size:11.5px; color:var(--teal)}
+.muted{margin:0; font-size:13px; color:var(--ink-3)}
+
+.tips{display:flex; flex-direction:column; gap:8px}
+.tip{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; color:var(--ink-2)}
+.key{font-family:var(--mono); font-size:10px; flex:none; min-width:21px; text-align:center; border:1px solid var(--line-2); border-bottom-width:2px; border-radius:5px; padding:1px 4px; background:var(--surface-2)}
+
+/* ---- collection ---- */
+.collection{margin-top:30px; padding-top:22px; border-top:1px solid var(--line)}
+.colhead{display:flex; align-items:baseline; gap:12px; margin-bottom:14px; flex-wrap:wrap}
+.colhead h2{font-size:18px; font-weight:600}
+.colhead .label{margin-left:auto}
+.slots{display:grid; grid-template-columns:repeat(auto-fill,minmax(132px,1fr)); gap:10px}
+.slot{border-radius:11px; border:1px solid var(--line); background:var(--surface); padding:11px; min-height:104px; display:flex; flex-direction:column; gap:5px}
+.slot.locked{border-style:dashed; background:transparent; align-items:center; justify-content:center; text-align:center; color:var(--ink-3)}
+.slot.locked .q{font-family:var(--display); font-weight:700; font-size:19px; opacity:.5}
+.slot.locked .label{font-size:9px}
+.slot .av{width:26px; height:26px; border-radius:7px; display:grid; place-items:center; font-family:var(--display); font-weight:700; font-size:11px; background:var(--accent-soft); color:var(--accent)}
+.slot strong{font-family:var(--display); font-size:13.5px; font-weight:600; line-height:1.2}
+.slot span{font-size:11.5px; color:var(--ink-3); line-height:1.3}
+.slot.got.r-rare{border-color:color-mix(in srgb,var(--accent) 46%,var(--line))}
+.slot.got.r-legendary{border-color:color-mix(in srgb,var(--gold) 55%,var(--line)); background:linear-gradient(150deg,var(--gold-soft),var(--surface) 62%)}
+.slot.got.r-legendary .av{background:var(--gold-soft); color:var(--gold)}
+.slot.fresh{animation:pop .5s cubic-bezier(.2,1.5,.4,1)}
+@keyframes pop{0%{transform:scale(.7); opacity:0}100%{transform:scale(1); opacity:1}}
+
+/* ---- reveal modal ---- */
+.scrim{position:fixed; inset:0; z-index:60; background:color-mix(in srgb,var(--ink) 62%,transparent); display:grid; place-items:center; padding:20px}
+.reveal{background:var(--surface); border:1px solid var(--line-2); border-radius:18px; box-shadow:var(--shadow-lift); max-width:430px; width:100%; padding:24px; text-align:center; max-height:92vh; overflow-y:auto}
+.reveal .kick{display:block; color:var(--accent); margin-bottom:9px}
+.face{width:88px; height:88px; margin:0 auto 14px; border-radius:20px; overflow:hidden; border:1px solid var(--line-2); animation:flip .7s cubic-bezier(.3,1.2,.4,1)}
+.face canvas{display:block; width:100%; height:100%}
+@keyframes flip{0%{transform:rotateY(180deg) scale(.6)}100%{transform:rotateY(0) scale(1)}}
+.reveal h2{font-size:27px; font-weight:700}
+.reveal .who{font-size:14.5px; color:var(--ink-2); margin:5px 0 0}
+.reveal .was{margin:14px 0 0; font-size:14px; color:var(--ink-2); background:var(--surface-2); border-radius:11px; padding:11px 13px}
+.reveal .was b{color:var(--ink)}
+.gain{display:flex; justify-content:center; gap:8px; flex-wrap:wrap; margin-top:15px}
+.gain span{font-family:var(--mono); font-size:11.5px; padding:5px 10px; border-radius:999px; background:var(--teal-soft); color:var(--teal); border:1px solid color-mix(in srgb,var(--teal) 34%,transparent)}
+.gain span.combo{background:var(--gold-soft); color:var(--gold); border-color:color-mix(in srgb,var(--gold) 38%,transparent)}
+.reveal .acts{margin-top:18px}
+
+/* ---- toast ---- */
+.toasts{position:fixed; left:50%; bottom:26px; transform:translateX(-50%); z-index:70; display:flex; flex-direction:column; gap:8px; align-items:center; pointer-events:none}
+.toast{font-family:var(--mono); font-size:12px; background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:999px; animation:rise .3s ease both}
+@keyframes rise{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
+
+@media (max-width:1020px){
+  .grid{grid-template-columns:minmax(0,1fr) 260px}
+  .rail-l{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:14px}
+  .rail-l .panel{margin-bottom:0}
+}
+@media (max-width:720px){
+  .wrap{padding-inline:16px}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .rail-l{grid-template-columns:1fr}
+  .stage{height:582px}
+  .brand{width:100%}
+}
+</style>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <h1>Face <em>Value</em></h1>
+      <span class="tag">You don't see the face. You see the work.</span>
+    </div>
+    <span class="pill">Prototype · sample people</span>
+    <button class="ghost" id="themeBtn" type="button">Theme</button>
+    <button class="ghost" id="resetBtn" type="button">New season</button>
+  </header>
+
+  <div class="grid">
+    <aside class="rail-l">
+      <section class="panel">
+        <span class="label">Your rank</span>
+        <div class="lvl"><b id="lvlNum">1</b><span id="lvlName">Cold Caller</span></div>
+        <div class="xpbar"><i id="xpFill" style="width:0%"></i></div>
+        <p class="xpnote" id="xpNote">0 XP</p>
+        <div class="streak">
+          <span class="flame">🔥</span>
+          <div><b id="streakNum">3 days</b><span>swiping streak</span></div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <span class="label">Series</span>
+        <div id="sets"></div>
+      </section>
+    </aside>
+
+    <section>
+      <div class="deckhead">
+        <h2>Today's table</h2>
+        <span class="label" id="left">16 cards left</span>
+      </div>
+      <div class="stage" id="stage"></div>
+      <div class="acts">
+        <button class="act no" id="passBtn" type="button">Not my table</button>
+        <button class="act undo" id="undoBtn" type="button" disabled>Undo</button>
+        <button class="act yes" id="yesBtn" type="button">Trade cards</button>
+      </div>
+    </section>
+
+    <aside>
+      <section class="panel">
+        <span class="label">Just revealed</span>
+        <div id="feed"><p class="muted">Nobody yet. A card only reveals when you both want to trade.</p></div>
+      </section>
+      <section class="panel">
+        <span class="label">How it plays</span>
+        <div class="tips">
+          <div class="tip"><span class="key">→</span><span>Trade cards — you want their contact</span></div>
+          <div class="tip"><span class="key">←</span><span>Pass — card leaves the table</span></div>
+          <div class="tip"><span class="key">Z</span><span>Undo the last call</span></div>
+          <div class="tip"><span class="key">↔</span><span>Or just drag the card</span></div>
+        </div>
+      </section>
+      <section class="panel">
+        <span class="label">Combo</span>
+        <p class="muted">Trade with two different series back to back for a <b style="color:var(--gold)">+40 XP</b> crossover bonus. Same series twice pays nothing — real networks are wide, not deep.</p>
+      </section>
+    </aside>
+  </div>
+
+  <section class="collection">
+    <div class="colhead">
+      <h2>Your collection</h2>
+      <span class="label" id="colCount">2 of 16 collected</span>
+    </div>
+    <div class="slots" id="slots"></div>
+  </section>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="reveal" role="dialog" aria-modal="true" aria-labelledby="rvName">
+    <span class="label kick">Card acquired</span>
+    <div class="face" id="face"><canvas width="176" height="176"></canvas></div>
+    <h2 id="rvName">—</h2>
+    <p class="who" id="rvWho"></p>
+    <p class="was">You traded on: <b id="rvAlias"></b></p>
+    <div class="gain" id="rvGain"></div>
+    <div class="acts">
+      <button class="act yes" id="keepBtn" type="button">Add to collection</button>
+    </div>
+  </div>
+</div>
+
+<div class="toasts" id="toasts"></div>
+
+<script>
+const SETS = {
+  F:{name:"Founders", total:4},
+  O:{name:"Operators", total:3},
+  C:{name:"Capital", total:3},
+  M:{name:"Makers", total:3},
+  X:{name:"Connectors", total:3}
+};
+const XP = {common:10, uncommon:25, rare:60, legendary:150};
+const RANKS = [
+  [0,"Cold Caller"],[60,"Badge Scanner"],[160,"Regular"],[320,"Table Host"],
+  [560,"Rainmaker"],[900,"Kingmaker"]
+];
+
+const PEOPLE = [
+  {id:"p1",set:"O",no:"O-01",rar:"uncommon",alias:"The Reshoring Operator",
+   role:"VP Supply Chain · housewares brand, $80M revenue", city:"Columbus, OH",
+   sig:["Moved 60% of production out of Shenzhen in 14 months","Keeps a spreadsheet of every US factory that answered her cold email","Tariff math is her party trick"],
+   needs:"Domestic capacity for injection-molded parts", brings:"A vetted list of 200 US contract manufacturers",
+   name:"Dana Whitfield", init:"DW", likes:true, seed:[214,88,60]},
+  {id:"p2",set:"F",no:"F-01",rar:"rare",alias:"The Second-Time Founder",
+   role:"CEO · warehouse robotics, Series A", city:"Pittsburgh, PA",
+   sig:["First company sold for parts, and he says that out loud","Hired his whole ops team from the previous cap table","Will not take a meeting before 10am"],
+   needs:"A design partner running 3+ distribution centers", brings:"Brutal honesty about what a Series A actually costs",
+   name:"Owen Marchetti", init:"OM", likes:true, seed:[268,70,55]},
+  {id:"p3",set:"C",no:"C-01",rar:"legendary",alias:"The Quiet Money",
+   role:"Partner · single-family office, $400M AUM", city:"Greenwich, CT",
+   sig:["No website, no LinkedIn, no deck reviews before an intro","Holds positions for 12+ years and says so on the first call","Third generation of the same family business"],
+   needs:"Operators worth backing, not pitches", brings:"Patient capital and a phone book from 1987",
+   name:"Margaret Oyelowo", init:"MO", likes:false, seed:[42,55,52]},
+  {id:"p4",set:"M",no:"M-01",rar:"common",alias:"The Machine Whisperer",
+   role:"Head of Fabrication · contract shop, 85 people", city:"Grand Rapids, MI",
+   sig:["Can quote a 5-axis job from a napkin sketch","Runs the shop's TikTok and it out-performs their sales team","Refuses to buy software that needs a login"],
+   needs:"Work that is not automotive", brings:"Prototype turnaround in 72 hours",
+   name:"Marcus Oyelaran", init:"MY", likes:true, seed:[188,62,48]},
+  {id:"p5",set:"X",no:"X-01",rar:"rare",alias:"The Conference Mayor",
+   role:"Executive Director · regional trade association", city:"Chicago, IL",
+   sig:["Knows the name of every plant manager in three states","Decides who speaks at the show that everyone attends","Answers texts at 6am, never email"],
+   needs:"Speakers who will say something risky on stage", brings:"An introduction that actually gets returned",
+   name:"Rosa Villanueva", init:"RV", likes:true, seed:[330,68,58]},
+  {id:"p6",set:"O",no:"O-02",rar:"uncommon",alias:"The Turnaround CFO",
+   role:"CFO · third distressed company in a row", city:"Nashville, TN",
+   sig:["Takes companies 90 days from insolvency and fixes them","Fired 40% of a workforce and still gets holiday cards from them","Reads the footnotes first, always"],
+   needs:"A bank that understands asset-based lending", brings:"A 13-week cash flow model that has never been wrong",
+   name:"Priya Raghunathan", init:"PR", likes:false, seed:[12,64,52]},
+  {id:"p7",set:"M",no:"M-02",rar:"common",alias:"The Solo Distiller",
+   role:"Owner · craft distillery, 6 employees", city:"Asheville, NC",
+   sig:["Built the still himself from a dairy tank","Waiting list is 800 people long for a $90 bottle","Has never paid for an advertisement"],
+   needs:"Distribution into two more states without losing the brand", brings:"A masterclass in demand you cannot buy",
+   name:"Hank Brzezinski", init:"HB", likes:false, seed:[28,70,50]},
+  {id:"p8",set:"C",no:"C-02",rar:"rare",alias:"The Syndicate Lead",
+   role:"Angel syndicate · 140 LPs, 31 checks written", city:"Austin, TX",
+   sig:["Can fill a $500K round from a group chat in 48 hours","Passed on two unicorns and tells the story at every dinner","Only invests where he can drive to the office"],
+   needs:"Deal flow outside of Austin", brings:"Speed, and 140 people who forward things",
+   name:"Cole Ferreira", init:"CF", likes:true, seed:[254,64,56]},
+  {id:"p9",set:"F",no:"F-02",rar:"uncommon",alias:"The Franchise Builder",
+   role:"Founder · 34 units across 4 states", city:"Phoenix, AZ",
+   sig:["Turned one location into 34 without outside money","Knows the unit economics of a car wash better than anyone alive","Keeps every franchisee's birthday in her phone"],
+   needs:"A real estate partner for the Southeast", brings:"A playbook for scaling anything with a physical footprint",
+   name:"Adaeze Mbanefo", init:"AM", likes:false, seed:[160,58,46]},
+  {id:"p10",set:"X",no:"X-02",rar:"common",alias:"The Permits Guy",
+   role:"Development consultant · municipal approvals", city:"Miami, FL",
+   sig:["Has the personal cell of four county planners","Cut an 11-month approval to 7 weeks, twice","Never puts anything important in writing"],
+   needs:"Developers who pay on time", brings:"The shortcut that is not on any website",
+   name:"Garrett Nkemelu", init:"GN", likes:true, seed:[198,55,45]},
+  {id:"p11",set:"F",no:"F-03",rar:"common",alias:"The Bootstrapper",
+   role:"Founder · $2.4M ARR, no investors, 5 staff", city:"Boise, ID",
+   sig:["Profitable from month three, and slightly smug about it","Ships every Friday and has for six years","Turned down a term sheet on a Tuesday"],
+   needs:"One great salesperson who does not need a manager", brings:"Proof you can skip the whole funding circus",
+   name:"Tessa Okonkwo", init:"TO", likes:false, seed:[142,60,45]},
+  {id:"p12",set:"O",no:"O-03",rar:"common",alias:"The Fleet Nerd",
+   role:"Director of Fleet · regional carrier, 240 trucks", city:"Kansas City, MO",
+   sig:["Shaved $1.1M off fuel spend with a tire pressure policy","Can tell you the resale value of any 2019 tractor","Argues about telematics at parties"],
+   needs:"Drivers, always drivers", brings:"Operational detail nobody else has bothered to measure",
+   name:"Bo Lindqvist", init:"BL", likes:false, seed:[210,50,44]},
+  {id:"p13",set:"M",no:"M-03",rar:"uncommon",alias:"The Lab Director",
+   role:"Director · clinical lab, 175 staff", city:"Newark, NJ",
+   sig:["Runs 4,000 panels a day and knows each machine's mood","Got CLIA certification in a building with no elevator","Hires on curiosity, not credentials"],
+   needs:"Employers who want on-site testing instead of referrals", brings:"Regulated-environment credibility that takes years to earn",
+   name:"Simone Achebe", init:"SA", likes:true, seed:[300,52,48]},
+  {id:"p14",set:"C",no:"C-03",rar:"uncommon",alias:"The Exited Founder",
+   role:"Advisor · sold to PE in 2023, now writes small checks", city:"Denver, CO",
+   sig:["Made the money and now openly regrets the earn-out","Sits on four boards and complains about three","Answers every cold DM, on principle"],
+   needs:"Something to do on Tuesdays", brings:"The scars from a deal that looked perfect on paper",
+   name:"Ellis Traynor", init:"ET", likes:true, seed:[92,48,45]},
+  {id:"p15",set:"F",no:"F-04",rar:"common",alias:"The Buyer of Boring",
+   role:"Search fund · hunting one business to run forever", city:"Cleveland, OH",
+   sig:["Looking for an HVAC or pest control company, seriously","Cold-called 900 owners last year and bought nothing","Has committed capital and 18 months of patience left"],
+   needs:"An owner in their sixties with no succession plan", brings:"A real offer, not a tire kick",
+   name:"Noor Haddadi", init:"NH", likes:false, seed:[22,45,42]},
+  {id:"p16",set:"X",no:"X-03",rar:"common",alias:"The Union Steward",
+   role:"Shop steward · 600-person plant", city:"Toledo, OH",
+   sig:["Negotiated a contract nobody thought would pass","Trusted by the floor and the front office at the same time","Has opinions about automation that you should hear"],
+   needs:"Management that shows up before there is a problem", brings:"The only honest read on what is happening in the plant",
+   name:"Ruth Calderón", init:"RC", likes:false, seed:[352,44,44]}
+];
+
+const KEY = "facevalue.v1";
+let state = {done:{}, got:["p4","p10"], xp:35, streak:3, lastSet:null, fresh:null};
+let history = [];
+
+function load(){ try{ const r=localStorage.getItem(KEY); if(r) state=Object.assign(state,JSON.parse(r)); }catch(e){} }
+function save(){ try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){} }
+function person(id){ return PEOPLE.find(p=>p.id===id); }
+
+function rank(){
+  let r = RANKS[0], i = 0;
+  RANKS.forEach((x,ix)=>{ if(state.xp >= x[0]){ r = x; i = ix; } });
+  const next = RANKS[i+1];
+  return {lvl:i+1, name:r[1], base:r[0], next:next ? next[0] : null};
+}
+
+/* deterministic abstract portrait — stands in for a photo */
+function paint(cv, seed){
+  const ctx = cv.getContext("2d");
+  const [h,s,l] = seed, w = cv.width, ht = cv.height;
+  ctx.fillStyle = "hsl(" + h + "," + s + "%," + l + "%)";
+  ctx.fillRect(0,0,w,ht);
+  for(let i=0;i<7;i++){
+    ctx.fillStyle = "hsla(" + ((h + i*26) % 360) + "," + (s-8) + "%," + (l + (i%2?16:-14)) + "%,.62)";
+    ctx.beginPath();
+    ctx.arc(w*(.18+.13*i), ht*(.28 + .1*((i*3)%5)), w*(.1+.045*((i*2)%4)), 0, Math.PI*2);
+    ctx.fill();
+  }
+  ctx.fillStyle = "hsla(" + h + ",70%," + Math.max(12,l-30) + "%,.5)";
+  ctx.fillRect(0, ht*.68, w, ht*.32);
+}
+
+const stage = document.getElementById("stage");
+let current = null;
+
+function queue(){ return PEOPLE.filter(p => !state.done[p.id]); }
+
+function cardHTML(p){
+  return '<div class="foil"></div>' +
+  '<div class="stamp yes">TRADE</div><div class="stamp no">PASS</div>' +
+  '<div class="cardtop"><span class="rar ' + p.rar + '">' + p.rar + '</span>' +
+    '<span class="no">' + p.no + ' · ' + SETS[p.set].name + '</span></div>' +
+  '<div class="masked"><div class="mug"><canvas width="120" height="120" data-seed="' + p.seed.join(",") + '"></canvas></div>' +
+    '<div class="redact"><div class="bar-redact"></div><div class="bar-redact short"></div>' +
+    '<span class="note">Name hidden until you both trade</span></div></div>' +
+  '<h3>' + p.alias + '</h3>' +
+  '<p class="role">' + p.role + '</p>' +
+  '<p class="place">' + p.city + '</p>' +
+  '<ul class="signals">' + p.sig.map(s=>'<li>' + s + '</li>').join("") + '</ul>' +
+  '<div class="swap"><div><span class="label">Wants</span><p>' + p.needs + '</p></div>' +
+    '<div><span class="label">Offers</span><p>' + p.brings + '</p></div></div>';
+}
+
+function render(){
+  const q = queue();
+  current = q[0] || null;
+  stage.innerHTML = "";
+  if(!q.length){
+    stage.innerHTML = '<div class="empty"><h3>Table cleared</h3><p>Twelve to sixteen cards a day, then it closes. Scarcity is the whole point — come back tomorrow, or start a new season.</p></div>';
+  } else {
+    q.slice(0,3).reverse().forEach(p=>{
+      const el = document.createElement("article");
+      el.className = "card r-" + p.rar;
+      el.dataset.depth = String(q.indexOf(p));
+      el.innerHTML = cardHTML(p);
+      stage.appendChild(el);
+    });
+    stage.querySelectorAll("canvas[data-seed]").forEach(cv=>{
+      paint(cv, cv.dataset.seed.split(",").map(Number));
+    });
+    drag();
+  }
+  document.getElementById("left").textContent = q.length + (q.length===1?" card left":" cards left");
+  document.getElementById("passBtn").disabled = !current;
+  document.getElementById("yesBtn").disabled = !current;
+  document.getElementById("undoBtn").disabled = !history.length;
+  renderRank(); renderSets(); renderFeed(); renderSlots();
+}
+
+function renderRank(){
+  const r = rank();
+  document.getElementById("lvlNum").textContent = r.lvl;
+  document.getElementById("lvlName").textContent = r.name;
+  const pct = r.next ? Math.min(100, (state.xp - r.base) / (r.next - r.base) * 100) : 100;
+  document.getElementById("xpFill").style.width = pct + "%";
+  document.getElementById("xpNote").textContent = r.next
+    ? state.xp + " XP · " + (r.next - state.xp) + " to " + RANKS[r.lvl][1]
+    : state.xp + " XP · top rank";
+  document.getElementById("streakNum").textContent = state.streak + (state.streak===1?" day":" days");
+}
+
+function renderSets(){
+  document.getElementById("sets").innerHTML = Object.keys(SETS).map(k=>{
+    const have = state.got.filter(id=>person(id).set===k).length;
+    const tot = SETS[k].total, done = have===tot;
+    return '<div class="setrow' + (done?" done":"") + '"><span class="sq">' + k + '</span>' +
+      '<span class="nm">' + SETS[k].name + (done?" ★":"") + '</span>' +
+      '<span class="ct">' + have + '/' + tot + '</span>' +
+      '<span class="tr"><i style="width:' + (have/tot*100) + '%"></i></span></div>';
+  }).join("");
+}
+
+function renderFeed(){
+  const box = document.getElementById("feed");
+  const list = state.got.slice().reverse().slice(0,5);
+  if(!list.length){ box.innerHTML = '<p class="muted">Nobody yet. A card only reveals when you both want to trade.</p>'; return; }
+  box.innerHTML = '<div class="feed">' + list.map(id=>{
+    const p = person(id);
+    return '<div class="fitem"><span class="av">' + p.init + '</span>' +
+      '<span class="tx"><strong>' + p.name + '</strong><span>' + p.city + '</span></span>' +
+      '<span class="xp">+' + XP[p.rar] + '</span></div>';
+  }).join("") + '</div>';
+}
+
+function renderSlots(){
+  document.getElementById("colCount").textContent = state.got.length + " of " + PEOPLE.length + " collected";
+  const order = Object.keys(SETS);
+  const album = PEOPLE.slice().sort((a,b)=>
+    order.indexOf(a.set) - order.indexOf(b.set) || a.no.localeCompare(b.no));
+  document.getElementById("slots").innerHTML = album.map(p=>{
+    if(state.got.includes(p.id)){
+      return '<div class="slot got r-' + p.rar + (state.fresh===p.id?" fresh":"") + '">' +
+        '<span class="av">' + p.init + '</span>' +
+        '<strong>' + p.name + '</strong>' +
+        '<span>' + p.alias.replace(/^The /,"") + ' · ' + p.no + '</span></div>';
+    }
+    return '<div class="slot locked"><span class="q">?</span><span class="label">' + p.no + '</span></div>';
+  }).join("");
+  state.fresh = null;
+}
+
+function toast(msg){
+  const t = document.createElement("div");
+  t.className = "toast"; t.textContent = msg;
+  document.getElementById("toasts").appendChild(t);
+  setTimeout(()=>t.remove(), 2200);
+}
+
+function decide(action){
+  if(!current) return;
+  const p = current;
+  const traded = action==="yes" && p.likes;
+  const top = stage.querySelector('[data-depth="0"]');
+  if(top){
+    top.classList.add("gone");
+    top.style.transform = "translateX(" + (action==="yes"?640:-640) + "px) rotate(" + (action==="yes"?20:-20) + "deg)";
+  }
+  let combo = false;
+  state.done[p.id] = action;
+  if(traded){
+    combo = state.lastSet && state.lastSet !== p.set;
+    state.got.push(p.id);
+    state.xp += XP[p.rar] + (combo ? 40 : 0);
+    state.lastSet = p.set;
+    state.fresh = p.id;
+  }
+  history.push({id:p.id, action, traded, combo, rar:p.rar});
+  save();
+  setTimeout(()=>{
+    render();
+    if(traded) reveal(p, combo);
+    else if(action==="yes") toast("Sent. They have not traded back — yet.");
+  }, 250);
+}
+
+function undo(){
+  const h = history.pop();
+  if(!h) return;
+  delete state.done[h.id];
+  if(h.traded){
+    state.got = state.got.filter(x=>x!==h.id);
+    state.xp = Math.max(0, state.xp - XP[h.rar] - (h.combo?40:0));
+  }
+  save(); render();
+}
+
+const scrim = document.getElementById("scrim");
+function reveal(p, combo){
+  paint(document.querySelector("#face canvas"), p.seed);
+  document.getElementById("rvName").textContent = p.name;
+  document.getElementById("rvWho").textContent = p.role + " · " + p.city;
+  document.getElementById("rvAlias").textContent = p.alias;
+  const done = Object.keys(SETS).filter(k=>{
+    return state.got.filter(id=>person(id).set===k).length === SETS[k].total;
+  });
+  let chips = '<span>+' + XP[p.rar] + ' XP · ' + p.rar + '</span>';
+  if(combo) chips += '<span class="combo">+40 XP crossover</span>';
+  if(done.includes(p.set)) chips += '<span class="combo">' + SETS[p.set].name + ' series complete ★</span>';
+  document.getElementById("rvGain").innerHTML = chips;
+  scrim.hidden = false;
+  document.getElementById("keepBtn").focus();
+}
+document.getElementById("keepBtn").addEventListener("click", ()=>{ scrim.hidden = true; renderSlots(); });
+scrim.addEventListener("click", e=>{ if(e.target===scrim) scrim.hidden = true; });
+
+function drag(){
+  const card = stage.querySelector('[data-depth="0"]');
+  if(!card) return;
+  const yes = card.querySelector(".stamp.yes"), no = card.querySelector(".stamp.no");
+  let x0=0, dx=0, on=false;
+  card.addEventListener("pointerdown", e=>{
+    if(e.target.closest("button")) return;
+    on=true; x0=e.clientX; dx=0;
+    card.setPointerCapture(e.pointerId); card.classList.add("drag");
+  });
+  card.addEventListener("pointermove", e=>{
+    if(!on) return;
+    dx = e.clientX - x0;
+    card.style.transform = "translateX(" + dx + "px) rotate(" + (dx/24) + "deg)";
+    yes.style.opacity = Math.max(0, Math.min(1, dx/100));
+    no.style.opacity = Math.max(0, Math.min(1, -dx/100));
+  });
+  const end = ()=>{
+    if(!on) return; on=false; card.classList.remove("drag");
+    if(Math.abs(dx) > 105){ decide(dx>0?"yes":"pass"); return; }
+    card.classList.add("settle"); card.style.transform = "";
+    yes.style.opacity=0; no.style.opacity=0;
+    setTimeout(()=>card.classList.remove("settle"), 300);
+  };
+  card.addEventListener("pointerup", end);
+  card.addEventListener("pointercancel", end);
+}
+
+document.getElementById("passBtn").addEventListener("click", ()=>decide("pass"));
+document.getElementById("yesBtn").addEventListener("click", ()=>decide("yes"));
+document.getElementById("undoBtn").addEventListener("click", undo);
+document.addEventListener("keydown", e=>{
+  if(!scrim.hidden){ if(e.key==="Escape"){ scrim.hidden=true; renderSlots(); } return; }
+  if(e.key==="ArrowRight") decide("yes");
+  else if(e.key==="ArrowLeft") decide("pass");
+  else if(e.key.toLowerCase()==="z") undo();
+});
+document.getElementById("resetBtn").addEventListener("click", ()=>{
+  state = {done:{}, got:[], xp:0, streak:1, lastSet:null, fresh:null};
+  history = []; save(); render(); toast("New season. Sixteen fresh cards.");
+});
+document.getElementById("themeBtn").addEventListener("click", ()=>{
+  const cur = document.documentElement.getAttribute("data-theme");
+  const dark = cur ? cur==="dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+});
+
+load(); render();
+</script>
