@@ -219,6 +219,63 @@ button{font:inherit; color:inherit; cursor:pointer}
 .toast{font-family:var(--mono); font-size:12px; background:var(--ink); color:var(--bg); padding:8px 14px; border-radius:999px; animation:rise .3s ease both}
 @keyframes rise{from{opacity:0; transform:translateY(10px)}to{opacity:1; transform:none}}
 
+
+/* ---- onboarding ---- */
+.ob{max-width:660px; margin:0 auto; padding-block:14px 40px}
+.dots{display:flex; gap:6px; margin-bottom:26px}
+.dots i{height:4px; flex:1; border-radius:3px; background:var(--surface-3)}
+.dots i.on{background:var(--accent)}
+.dots i.past{background:color-mix(in srgb,var(--accent) 45%,var(--surface-3))}
+.ob h2{font-size:30px; font-weight:700; line-height:1.1}
+.ob .sub{margin:9px 0 0; color:var(--ink-2); font-size:15px; max-width:52ch}
+.opts{display:flex; flex-direction:column; gap:9px; margin-top:24px}
+.opt{display:flex; gap:12px; align-items:flex-start; text-align:left; width:100%;
+  background:var(--surface); border:1px solid var(--line); border-radius:13px; padding:14px 15px;
+  transition:border-color .14s ease, transform .14s ease}
+.opt:hover{border-color:var(--accent); transform:translateX(3px)}
+.opt .tick{width:22px; height:22px; flex:none; border-radius:7px; border:1px solid var(--line-2);
+  background:var(--surface-2); display:grid; place-items:center; font-family:var(--mono); font-size:10px; color:var(--ink-3)}
+.opt strong{display:block; font-family:var(--display); font-size:16px; font-weight:600; line-height:1.25}
+.opt span{display:block; font-size:13.5px; color:var(--ink-2); margin-top:2px}
+.opt.big{padding:18px}
+.opt.big strong{font-size:19px}
+.obfoot{display:flex; align-items:center; gap:10px; margin-top:22px; flex-wrap:wrap}
+.obfoot .label{margin-right:auto}
+.wall{margin-top:26px; border:1px solid var(--line); border-left:3px solid var(--hot); border-radius:11px;
+  background:var(--surface); padding:13px 15px}
+.wall .label{display:block; color:var(--hot); margin-bottom:5px}
+.wall p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.45}
+.peek{display:flex; gap:7px; margin-top:24px}
+.peek div{flex:1; height:58px; border:1px dashed var(--line-2); border-radius:9px; display:grid; place-items:center;
+  font-family:var(--display); font-weight:700; font-size:15px; color:var(--ink-3); opacity:.55}
+.preview{display:flex; justify-content:center; margin-top:24px}
+.preview .card{position:relative; inset:auto; width:100%; max-width:396px; height:auto; min-height:0}
+.selfnote{display:flex; gap:10px; align-items:flex-start; margin-top:15px; padding:11px 12px;
+  border-radius:10px; background:var(--accent-soft); border:1px solid color-mix(in srgb,var(--accent) 28%,transparent)}
+.selfnote p{margin:0; font-size:13px; color:var(--ink-2); line-height:1.4}
+.selfnote b{color:var(--ink)}
+.cityrow{display:flex; gap:10px; align-items:center; margin-top:20px; flex-wrap:wrap}
+.cityrow select{font:inherit; font-size:14px; color:var(--ink); background:var(--surface); border:1px solid var(--line-2);
+  border-radius:9px; padding:9px 11px}
+
+/* ---- pool banner ---- */
+.pool{display:flex; gap:11px; align-items:center; background:var(--surface); border:1px solid var(--line);
+  border-radius:11px; padding:11px 13px; margin-bottom:14px}
+.pool .badge{font-family:var(--mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase;
+  padding:4px 9px; border-radius:6px; white-space:nowrap}
+.pool .badge.business{background:var(--accent-soft); color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 34%,transparent)}
+.pool .badge.social{background:var(--hot-soft); color:var(--hot); border:1px solid color-mix(in srgb,var(--hot) 34%,transparent)}
+.pool .badge.both{background:var(--gold-soft); color:var(--gold); border:1px solid color-mix(in srgb,var(--gold) 36%,transparent)}
+.pool p{margin:0; font-size:12.5px; color:var(--ink-2); line-height:1.35}
+.mine{display:flex; gap:10px; align-items:center}
+.mine .av{width:34px; height:34px; flex:none; border-radius:9px; display:grid; place-items:center;
+  font-family:var(--display); font-weight:700; font-size:12px; background:var(--accent); color:#fff}
+.mine strong{display:block; font-family:var(--display); font-size:14px; font-weight:600; line-height:1.2}
+.mine span{font-size:12px; color:var(--ink-3)}
+.card .kind{font-family:var(--mono); font-size:9.5px; letter-spacing:.1em; text-transform:uppercase;
+  padding:3px 7px; border-radius:5px; border:1px solid; background:var(--hot-soft); color:var(--hot);
+  border-color:color-mix(in srgb,var(--hot) 34%,transparent)}
+
 @media (max-width:1020px){
   .grid{grid-template-columns:minmax(0,1fr) 260px}
   .rail-l{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:14px}
@@ -240,9 +297,15 @@ button{font:inherit; color:inherit; cursor:pointer}
       <span class="tag">You don't see the face. You see the work.</span>
     </div>
     <span class="pill">Prototype · sample people</span>
+    <button class="ghost" id="editBtn" type="button" hidden>Edit profile</button>
     <button class="ghost" id="themeBtn" type="button">Theme</button>
     <button class="ghost" id="resetBtn" type="button">New season</button>
   </header>
+
+  <div class="ob" id="ob"></div>
+
+  <div id="app" hidden>
+  <div class="pool" id="poolBar"></div>
 
   <div class="grid">
     <aside class="rail-l">
@@ -255,6 +318,12 @@ button{font:inherit; color:inherit; cursor:pointer}
           <span class="flame">🔥</span>
           <div><b id="streakNum">3 days</b><span>swiping streak</span></div>
         </div>
+      </section>
+
+      <section class="panel">
+        <span class="label">Your card</span>
+        <div class="mine"><span class="av" id="myAv">YOU</span>
+          <div><strong id="myAlias">—</strong><span id="myRole"></span></div></div>
       </section>
 
       <section class="panel">
@@ -304,6 +373,7 @@ button{font:inherit; color:inherit; cursor:pointer}
     </div>
     <div class="slots" id="slots"></div>
   </section>
+  </div>
 </div>
 
 <div class="scrim" id="scrim" hidden>
@@ -324,11 +394,11 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 <script>
 const SETS = {
-  F:{name:"Founders", total:4},
-  O:{name:"Operators", total:3},
-  C:{name:"Capital", total:3},
-  M:{name:"Makers", total:3},
-  X:{name:"Connectors", total:3}
+  F:{name:"Founders", total:4, mode:"business"},
+  O:{name:"Operators", total:3, mode:"business"},
+  C:{name:"Capital", total:3, mode:"business"},
+  M:{name:"Makers", total:3, mode:"business"},
+  X:{name:"Connectors", total:3, mode:"business"}
 };
 const XP = {common:10, uncommon:25, rare:60, legendary:150};
 const RANKS = [
@@ -419,8 +489,10 @@ const PEOPLE = [
    name:"Ruth Calderón", init:"RC", likes:false, seed:[352,44,44]}
 ];
 
-const KEY = "facevalue.v1";
-let state = {done:{}, got:["p4","p10"], xp:35, streak:3, lastSet:null, fresh:null};
+PEOPLE.forEach(p=>{ p.mode = "business"; });
+
+const KEY = "facevalue.v2";
+let state = {profile:null, done:{}, got:[], xp:0, streak:1, lastSet:null, fresh:null};
 let history = [];
 
 function load(){ try{ const r=localStorage.getItem(KEY); if(r) state=Object.assign(state,JSON.parse(r)); }catch(e){} }
@@ -453,16 +525,20 @@ function paint(cv, seed){
 const stage = document.getElementById("stage");
 let current = null;
 
-function queue(){ return PEOPLE.filter(p => !state.done[p.id]); }
+const MODE_LABEL = {business:"Business pool"};
 
-function cardHTML(p){
-  return '<div class="foil"></div>' +
-  '<div class="stamp yes">TRADE</div><div class="stamp no">PASS</div>' +
-  '<div class="cardtop"><span class="rar ' + p.rar + '">' + p.rar + '</span>' +
+function poolPeople(){ return PEOPLE.filter(p => p.mode === "business"); }
+function poolSets(){ return Object.keys(SETS); }
+function queue(){ return poolPeople().filter(p => !state.done[p.id]); }
+
+function cardHTML(p, self){
+  return (self ? '' : '<div class="foil"></div>' +
+  '<div class="stamp yes">TRADE</div><div class="stamp no">PASS</div>') +
+  '<div class="cardtop"><span class="rar ' + p.rar + '">' + (self ? "your card" : p.rar) + '</span>' +
     '<span class="no">' + p.no + ' · ' + SETS[p.set].name + '</span></div>' +
   '<div class="masked"><div class="mug"><canvas width="120" height="120" data-seed="' + p.seed.join(",") + '"></canvas></div>' +
     '<div class="redact"><div class="bar-redact"></div><div class="bar-redact short"></div>' +
-    '<span class="note">Name hidden until you both trade</span></div></div>' +
+    '<span class="note">' + (self ? "This is all they get to judge" : "Name hidden until you both trade") + '</span></div></div>' +
   '<h3>' + p.alias + '</h3>' +
   '<p class="role">' + p.role + '</p>' +
   '<p class="place">' + p.city + '</p>' +
@@ -510,7 +586,7 @@ function renderRank(){
 }
 
 function renderSets(){
-  document.getElementById("sets").innerHTML = Object.keys(SETS).map(k=>{
+  document.getElementById("sets").innerHTML = poolSets().map(k=>{
     const have = state.got.filter(id=>person(id).set===k).length;
     const tot = SETS[k].total, done = have===tot;
     return '<div class="setrow' + (done?" done":"") + '"><span class="sq">' + k + '</span>' +
@@ -522,7 +598,8 @@ function renderSets(){
 
 function renderFeed(){
   const box = document.getElementById("feed");
-  const list = state.got.slice().reverse().slice(0,5);
+  const pool = poolPeople().map(p=>p.id);
+  const list = state.got.filter(id=>pool.includes(id)).slice().reverse().slice(0,5);
   if(!list.length){ box.innerHTML = '<p class="muted">Nobody yet. A card only reveals when you both want to trade.</p>'; return; }
   box.innerHTML = '<div class="feed">' + list.map(id=>{
     const p = person(id);
@@ -533,9 +610,11 @@ function renderFeed(){
 }
 
 function renderSlots(){
-  document.getElementById("colCount").textContent = state.got.length + " of " + PEOPLE.length + " collected";
-  const order = Object.keys(SETS);
-  const album = PEOPLE.slice().sort((a,b)=>
+  const pool = poolPeople();
+  document.getElementById("colCount").textContent =
+    state.got.filter(id=>pool.some(p=>p.id===id)).length + " of " + pool.length + " collected";
+  const order = poolSets();
+  const album = pool.slice().sort((a,b)=>
     order.indexOf(a.set) - order.indexOf(b.set) || a.no.localeCompare(b.no));
   document.getElementById("slots").innerHTML = album.map(p=>{
     if(state.got.includes(p.id)){
@@ -600,7 +679,7 @@ function reveal(p, combo){
   document.getElementById("rvName").textContent = p.name;
   document.getElementById("rvWho").textContent = p.role + " · " + p.city;
   document.getElementById("rvAlias").textContent = p.alias;
-  const done = Object.keys(SETS).filter(k=>{
+  const done = poolSets().filter(k=>{
     return state.got.filter(id=>person(id).set===k).length === SETS[k].total;
   });
   let chips = '<span>+' + XP[p.rar] + ' XP · ' + p.rar + '</span>';
@@ -651,7 +730,7 @@ document.addEventListener("keydown", e=>{
   else if(e.key.toLowerCase()==="z") undo();
 });
 document.getElementById("resetBtn").addEventListener("click", ()=>{
-  state = {done:{}, got:[], xp:0, streak:1, lastSet:null, fresh:null};
+  state = {profile:state.profile, done:{}, got:[], xp:0, streak:1, lastSet:null, fresh:null};
   history = []; save(); render(); toast("New season. Sixteen fresh cards.");
 });
 document.getElementById("themeBtn").addEventListener("click", ()=>{
@@ -660,5 +739,189 @@ document.getElementById("themeBtn").addEventListener("click", ()=>{
   document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
 });
 
-load(); render();
+/* ================= onboarding ================= */
+const Q = {
+  arch:{t:"What is your table?", s:"Pick the one that is most true this year, not the one that sounds best.", o:[
+    {id:"F", l:"Building something of my own", d:"Founder, owner, self-employed",
+     alias:"The Owner-Operator", role:"Building something of my own", sig:"Everything that breaks is mine to fix, payroll included"},
+    {id:"O", l:"Running the machine day to day", d:"Ops, supply chain, finance, general management",
+     alias:"The Fixer", role:"Running the machine day to day", sig:"Nobody notices my job until the week it stops working"},
+    {id:"C", l:"Deciding where money goes", d:"Investor, lender, buyer, board",
+     alias:"The Check Writer", role:"Deciding where money goes", sig:"I say no about forty times for every yes"},
+    {id:"M", l:"Making the actual thing", d:"Engineering, fabrication, production, craft",
+     alias:"The Builder", role:"Making the actual thing", sig:"I would rather show you the part than talk about it"},
+    {id:"X", l:"Knowing who to call", d:"Sales, BD, associations, community",
+     alias:"The Connector", role:"Knowing who to call", sig:"My whole value is a phone book nobody else has"}
+  ]},
+  industry:{t:"Which world do you live in?", s:"This is the context people read you in.", o:[
+    {id:"Manufacturing", l:"Manufacturing", sig:"Spent this year trying to move production closer to home"},
+    {id:"Software", l:"Software", sig:"Ships things other people's payroll quietly depends on"},
+    {id:"Healthcare", l:"Healthcare", sig:"Works inside rules that change faster than the software does"},
+    {id:"Trades & construction", l:"Trades and construction", sig:"Knows exactly what a permit delay costs per day"},
+    {id:"Food & drink", l:"Food and drink", sig:"Margins so thin they have become a personality trait"},
+    {id:"Logistics", l:"Logistics", sig:"Measures the week in miles, not hours"}
+  ]},
+  want:{t:"What do you actually want from this?", s:"One answer. The honest one gets better matches than the impressive one.", o:[
+    {id:"customers", l:"Customers who already know they have the problem"},
+    {id:"cofounder", l:"A co-founder who is good at what I am bad at"},
+    {id:"capital", l:"Capital that does not come with a board seat"},
+    {id:"hires", l:"Two hires I would not have to manage"},
+    {id:"advice", l:"Someone who has already made my next mistake"},
+    {id:"peers", l:"Peers who understand the job without a translation layer"}
+  ]},
+  offer:{t:"And what do you bring to the table?", s:"The thing you would actually do for a stranger on a Tuesday.", o:[
+    {id:"intros", l:"Introductions I can genuinely vouch for"},
+    {id:"scars", l:"A decade of scars in one specific industry"},
+    {id:"money", l:"Capital, and the patience that should go with it"},
+    {id:"numbers", l:"I will read your numbers and tell you the truth"},
+    {id:"hands", l:"Hands that can build the prototype this week"},
+    {id:"room", l:"A room full of people who show up when I ask"}
+  ]},
+  truth:{t:"One true thing about how you work", s:"This is the line that makes someone swipe, or not.", o:[
+    {id:"t1", l:"I answer every cold message, on principle"},
+    {id:"t2", l:"I will not take a meeting before 10am"},
+    {id:"t3", l:"I ship every Friday and have for years"},
+    {id:"t4", l:"I have never paid for an advertisement"},
+    {id:"t5", l:"I read the footnotes first, always"},
+    {id:"t6", l:"I make decisions fast and change my mind in public"}
+  ]},
+
+
+
+};
+const CITIES = ["Chicago, IL","New York, NY","Austin, TX","Denver, CO","Atlanta, GA","Los Angeles, CA","Detroit, MI","Miami, FL"];
+const FLOW = {business:["arch","industry","want","offer","truth"]};
+
+let ob = {step:0, mode:null, gate:null, a:{}, city:CITIES[0]};
+const obEl = document.getElementById("ob");
+const appEl = document.getElementById("app");
+
+function pick(k){ return Q[k].o.find(x=>x.id===ob.a[k]); }
+
+function buildCard(){
+  const ind = pick("industry"), ar = pick("arch"),
+        wt = pick("want"), of = pick("offer"), tr = pick("truth");
+  return {id:"me", mode:"business", set:ar.id, no:"YOU", rar:"common",
+    alias:ar.alias, role:ar.role + " · " + ind.l, city:ob.city,
+    sig:[ar.sig, tr.l, ind.sig], needs:wt.l, brings:of.l, seed:[232,54,50]};
+}
+
+function renderOb(){
+  const flow = ob.mode ? FLOW[ob.mode] : [];
+  const total = 1 + flow.length + 1;
+  const dots = Array.from({length:total}, (_,i)=>
+    '<i class="' + (i===ob.step?"on":(i<ob.step?"past":"")) + '"></i>').join("");
+
+  if(ob.gate){
+    const social = ob.gate === "social";
+    obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
+      '<h2>That deck is not dealt yet</h2>' +
+      '<p class="sub">' + (social ? "The social deck" : "The second deck") +
+        ' opens once the business side is dense enough to be worth showing up for. ' +
+        'Launching both at once is exactly how you end up with two empty rooms instead of one full one.</p>' +
+      '<div class="wall"><span class="label">Why you are reading this</span>' +
+        '<p>A deck needs roughly fifteen good cards a week per person or nobody comes back. One city and one intent can reach that. Two intents halves it, and both die. Business first, on purpose.</p></div>' +
+      '<div class="opts" style="margin-top:24px">' +
+        '<button class="opt" type="button" id="gList"><span class="tick">→</span>' +
+          '<span><strong>Put me on the list for it</strong><span>You get a message the day that deck opens in your city</span></span></button>' +
+        '<button class="opt" type="button" id="gBiz"><span class="tick">→</span>' +
+          '<span><strong>Fine, deal me the business deck</strong><span>16 cards are live right now</span></span></button>' +
+      '</div>' +
+      '<div class="obfoot"><span class="label">Waiting room</span>' +
+        '<button class="ghost" type="button" id="obBack">Back</button></div>';
+    document.getElementById("gList").addEventListener("click", ()=>{
+      toast("On the list. We will not email you about anything else.");
+    });
+    document.getElementById("gBiz").addEventListener("click", ()=>{
+      ob.mode = "business"; ob.gate = null; ob.a = {}; ob.step = 1; renderOb();
+    });
+    document.getElementById("obBack").addEventListener("click", ()=>{ ob.gate = null; renderOb(); });
+    return;
+  }
+
+  if(ob.step === 0){
+    obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
+      '<h2>What are you here for?</h2>' +
+      '<p class="sub">This is the only answer you cannot soften later. It decides whose deck you appear in — and whose you never do.</p>' +
+      '<div class="opts">' +
+      '<button class="opt big" type="button" data-m="business"><span class="tick">1</span>' +
+        '<span><strong>Business</strong><span>Customers, partners, capital, hires. You will never be shown to someone who came here to date.</span></span></button>' +
+      '<button class="opt big" type="button" data-m="social"><span class="tick">2</span>' +
+        '<span><strong>Just meet people</strong><span>Friends, something to do, or dating.</span></span></button>' +
+      '<button class="opt big" type="button" data-m="both"><span class="tick">3</span>' +
+        '<span><strong>Both, honestly</strong><span>Two cards, two decks, no bleed between them.</span></span></button>' +
+      '</div>' +
+      '<div class="wall"><span class="label">The wall</span><p>Business and Social are two separate decks with no bridge between them. Someone who picked Business is never shown a dating card and never appears in one. Mixed intent in a single pile is what killed every app that tried this before.</p></div>' +
+      '<div class="peek"><div>F</div><div>O</div><div>C</div><div>M</div><div>X</div></div>';
+    obEl.querySelectorAll("[data-m]").forEach(b=>b.addEventListener("click",()=>{
+      const m = b.dataset.m;
+      if(m === "business"){ ob.mode = "business"; ob.gate = null; ob.a = {}; ob.step = 1; }
+      else { ob.gate = m; }
+      renderOb();
+    }));
+    return;
+  }
+
+  if(ob.step <= flow.length){
+    const k = flow[ob.step-1], q = Q[k];
+    obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
+      '<h2>' + q.t + '</h2><p class="sub">' + q.s + '</p>' +
+      '<div class="opts">' + q.o.map((o,i)=>
+        '<button class="opt" type="button" data-o="' + o.id + '"><span class="tick">' + (i+1) + '</span>' +
+        '<span><strong>' + o.l + '</strong>' + (o.d ? '<span>' + o.d + '</span>' : '') + '</span></button>').join("") +
+      '</div>' +
+      '<div class="obfoot"><span class="label">Step ' + ob.step + ' of ' + (total-1) + '</span>' +
+        '<button class="ghost" type="button" id="obBack">Back</button></div>';
+    obEl.querySelectorAll("[data-o]").forEach(b=>b.addEventListener("click",()=>{
+      ob.a[k] = b.dataset.o; ob.step++; renderOb();
+    }));
+    document.getElementById("obBack").addEventListener("click",()=>{ ob.step--; renderOb(); });
+    return;
+  }
+
+  const card = buildCard();
+  obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
+    '<h2>This is your card</h2>' +
+    '<p class="sub">Written from your answers. No photo, no name, no company logo — the only things anyone can judge you on are below.</p>' +
+    '<div class="preview"><article class="card r-common">' + cardHTML(card, true) + '</article></div>' +
+    '<div class="selfnote"><p><b>Business pool.</b> You will only ever be shown people who also came here for business, and only they will be shown you. Change that answer and you get a different card in a different deck.</p></div>' +
+    '<div class="cityrow"><span class="label">Where are you</span>' +
+      '<select id="obCity">' + CITIES.map(c=>'<option' + (c===ob.city?" selected":"") + '>' + c + '</option>').join("") + '</select></div>' +
+    '<div class="obfoot"><span class="label">Last step</span>' +
+      '<button class="ghost" type="button" id="obBack">Back</button>' +
+      '<button class="act yes" type="button" id="obGo">Deal me in</button></div>';
+  obEl.querySelectorAll("canvas[data-seed]").forEach(cv=>paint(cv, cv.dataset.seed.split(",").map(Number)));
+  document.getElementById("obCity").addEventListener("change", e=>{ ob.city = e.target.value; renderOb(); });
+  document.getElementById("obBack").addEventListener("click",()=>{ ob.step--; renderOb(); });
+  document.getElementById("obGo").addEventListener("click",()=>{
+    state.profile = {mode:ob.mode, card:buildCard(), answers:Object.assign({}, ob.a), city:ob.city};
+    state.done = {}; state.got = []; state.xp = 0; state.lastSet = null;
+    history = []; save(); showApp();
+    toast("You are in the business pool. 16 cards on the table.");
+  });
+}
+
+function showOnboarding(){
+  ob = {step:0, mode:null, gate:null, a:{}, city:(state.profile ? state.profile.city : CITIES[0])};
+  obEl.hidden = false; appEl.hidden = true;
+  document.getElementById("editBtn").hidden = !state.profile;
+  renderOb();
+}
+
+function showApp(){
+  obEl.hidden = true; appEl.hidden = false;
+  document.getElementById("editBtn").hidden = false;
+  const pf = state.profile, n = poolPeople().length;
+  document.getElementById("poolBar").innerHTML =
+    '<span class="badge business">Business pool</span>' +
+    '<p>' + n + ' people answered the first question the same way you did. Nobody who came here to date can see your card, and you will never see theirs.</p>';
+  document.getElementById("myAlias").textContent = pf.card.alias;
+  document.getElementById("myRole").textContent = pf.card.role;
+  document.getElementById("myAv").textContent = "YOU";
+  render();
+}
+document.getElementById("editBtn").addEventListener("click", showOnboarding);
+
+load();
+if(state.profile) showApp(); else showOnboarding();
 </script>
