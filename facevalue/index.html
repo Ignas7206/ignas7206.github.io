@@ -536,19 +536,19 @@ const MEET_BONUS = 40;
 const RANKS = [[0,"Cold Caller"],[80,"Badge Scanner"],[200,"Regular"],[380,"Table Host"],[640,"Rainmaker"],[980,"Kingmaker"]];
 
 const REPLIES = {
-  p1:"You actually read the card, which puts you ahead of most. Ask me anything about reefer telemetry — I have now sat through every pitch in the category.",
-  p2:"Fair warning: I will ask what you are building before I say a word about mine. Occupational damage from the first company.",
-  p4:"Come Tuesday and I will walk you through the shop. Bring a part you think we cannot make.",
-  p5:"Text me, do not email. Tell me what you need and who you want to be standing in front of.",
-  p8:"The group chat moves fast, so be blunt with me. What is the round, and what is the story behind it?",
-  p10:"I put nothing important in writing. But I will tell you anything at all over a coffee.",
-  p13:"I get about twenty minutes between runs. What is the thing you are actually trying to test?",
-  p14:"I answer every message on principle, so here I am. What is the part you are stuck on?"
+  p1:"ok so are you selling me telemetry or not. asking because that's four this month and I've stopped being polite about it",
+  p2:"Hey. Before anything else — what are you building? I have a rule about going second.",
+  p4:"how'd you find me. anyway yeah come by, we're here til four, bring the part",
+  p5:"👋 tell me what you need and who from. I'm at a show til Thursday so be quick with me",
+  p8:"how much and how fast. genuinely that's the whole first conversation on my end",
+  p10:"ha. I'm not putting anything useful in a chat. coffee?",
+  p13:"I've got maybe twenty minutes around two. what's the actual question",
+  p14:"Hi. I answer everything so don't read too much into this. What's the thing annoying you this week?"
 };
 const ACCEPTS = [
-  "Done, it is in my calendar. I will call you.",
-  "That works. I will send a pin for the place.",
-  "Booked. If anything moves I will tell you a day ahead, not an hour."
+  "done, it's in the calendar",
+  "works. I'll send the place, it's not the obvious one",
+  "booked. if it moves I'll tell you a day ahead, not an hour"
 ];
 const PLAN_KINDS = [
   {id:"call", ic:"📞", t:"Twenty minutes on the phone", d:"No deck, no agenda"},
@@ -825,11 +825,11 @@ function viewThreads(){
 }
 
 function openersFor(p){
-  const me = state.profile.card;
+  const me = state.profile.card, job = lower(me.role.split(" · ")[0]);
   return [
-    {k:"On what they want", t:"You said you need " + lower(p.needs) + ". I think I can actually help there — can I ask two questions first?"},
-    {k:"On their card", t:"“" + p.sig[1] + "” — that is the line that made me trade. How did you land on it?"},
-    {k:"No pitch", t:"No pitch from me. I am in " + me.city + ", " + lower(me.role) + ", and I would rather find out in twenty minutes than over six emails."}
+    {k:"On what they want", t:"You need " + lower(p.needs) + ". I might have that. Two questions before I waste your afternoon?"},
+    {k:"On their card", t:"“" + p.sig[1] + "” — that’s the line I swiped on. How did you end up there?"},
+    {k:"No pitch", t:"No pitch. I’m in " + me.city + ", " + job + ". I’d rather find out in twenty minutes than over six emails."}
   ];
 }
 
