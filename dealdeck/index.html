@@ -1,0 +1,800 @@
+<title>Deal Deck</title>
+<link rel="preconnect" href="https://fonts.googleapis.com" />
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Archivo:wght@500;600;700;800&family=IBM+Plex+Mono:wght@400;500;600&family=Source+Sans+3:wght@400;600&display=swap" />
+<style>
+:root{
+  --bg:#F4F6F7; --surface:#FFFFFF; --surface-2:#EAEEEF; --surface-3:#E1E7E7;
+  --ink:#10201F; --ink-2:#4A5C5B; --ink-3:#7C8D8C;
+  --line:#D5DDDD; --line-2:#C2CDCC;
+  --accent:#0E6E68; --accent-ink:#0A4F4A; --accent-soft:#D8EBE8;
+  --amber:#9E6409; --amber-soft:#F6E8CD;
+  --pass:#A3402C; --pass-soft:#F3DED8;
+  --shadow:0 1px 2px rgba(16,32,31,.06),0 12px 28px -12px rgba(16,32,31,.22);
+  --shadow-lift:0 2px 4px rgba(16,32,31,.08),0 26px 50px -18px rgba(16,32,31,.34);
+  --r:10px;
+  --display:"Archivo",system-ui,sans-serif;
+  --body:"Source Sans 3",system-ui,sans-serif;
+  --mono:"IBM Plex Mono",ui-monospace,SFMono-Regular,Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --bg:#0B1413; --surface:#132020; --surface-2:#1A2928; --surface-3:#223231;
+    --ink:#E7EEED; --ink-2:#A2B3B1; --ink-3:#6E817F;
+    --line:#273634; --line-2:#334543;
+    --accent:#43B7A8; --accent-ink:#8FD8CD; --accent-soft:#123230;
+    --amber:#DDA14A; --amber-soft:#33260F;
+    --pass:#E07A64; --pass-soft:#341914;
+    --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 28px -12px rgba(0,0,0,.7);
+    --shadow-lift:0 2px 4px rgba(0,0,0,.5),0 26px 50px -18px rgba(0,0,0,.8);
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0B1413; --surface:#132020; --surface-2:#1A2928; --surface-3:#223231;
+  --ink:#E7EEED; --ink-2:#A2B3B1; --ink-3:#6E817F;
+  --line:#273634; --line-2:#334543;
+  --accent:#43B7A8; --accent-ink:#8FD8CD; --accent-soft:#123230;
+  --amber:#DDA14A; --amber-soft:#33260F;
+  --pass:#E07A64; --pass-soft:#341914;
+  --shadow:0 1px 2px rgba(0,0,0,.4),0 12px 28px -12px rgba(0,0,0,.7);
+  --shadow-lift:0 2px 4px rgba(0,0,0,.5),0 26px 50px -18px rgba(0,0,0,.8);
+}
+
+*{box-sizing:border-box}
+[hidden]{display:none!important}
+body{
+  margin:0; background:var(--bg); color:var(--ink);
+  font-family:var(--body); font-size:15px; line-height:1.5;
+  -webkit-font-smoothing:antialiased;
+}
+h1,h2,h3{font-family:var(--display); margin:0; text-wrap:balance; letter-spacing:-.015em}
+button{font:inherit; color:inherit; cursor:pointer}
+:focus-visible{outline:2px solid var(--accent); outline-offset:2px; border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{animation-duration:.01ms!important; transition-duration:.01ms!important}}
+
+.label{
+  font-family:var(--mono); font-size:10.5px; font-weight:500;
+  letter-spacing:.11em; text-transform:uppercase; color:var(--ink-3);
+}
+.num{font-family:var(--mono); font-variant-numeric:tabular-nums}
+
+/* ---------- shell ---------- */
+.wrap{max-width:1320px; margin:0 auto; padding-inline:20px; padding-block:0 40px}
+
+.topbar{
+  display:flex; align-items:center; gap:16px; flex-wrap:wrap;
+  padding-block:18px 16px; border-bottom:1px solid var(--line);
+  margin-bottom:22px;
+}
+.brand{display:flex; align-items:baseline; gap:10px; margin-right:auto}
+.brand h1{font-size:23px; font-weight:800}
+.brand .dot{color:var(--accent)}
+.brand .tag{font-size:13px; color:var(--ink-2)}
+.demo-pill{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--amber); background:var(--amber-soft); border:1px solid color-mix(in srgb,var(--amber) 34%,transparent);
+  padding:4px 9px; border-radius:999px; white-space:nowrap;
+}
+.ghost-btn{
+  background:transparent; border:1px solid var(--line-2); color:var(--ink-2);
+  padding:6px 12px; border-radius:7px; font-size:13px;
+}
+.ghost-btn:hover{border-color:var(--accent); color:var(--accent)}
+
+.grid{display:grid; grid-template-columns:264px minmax(0,1fr) 300px; gap:22px; align-items:start}
+
+.panel{
+  background:var(--surface); border:1px solid var(--line); border-radius:var(--r);
+  padding:16px; margin-bottom:16px;
+}
+.panel > .label{display:block; margin-bottom:12px}
+
+/* ---------- left rail: my desk ---------- */
+.me{display:flex; gap:11px; align-items:center; margin-bottom:14px}
+.me .mark{
+  width:38px; height:38px; border-radius:8px; flex:none;
+  background:var(--accent); color:#fff; display:grid; place-items:center;
+  font-family:var(--display); font-weight:700; font-size:14px;
+}
+.me strong{display:block; font-family:var(--display); font-size:15px}
+.me span{font-size:12.5px; color:var(--ink-3)}
+
+.field{display:block; margin-bottom:11px}
+.field .label{display:block; margin-bottom:5px}
+select{
+  width:100%; font:inherit; font-size:13.5px; color:var(--ink);
+  background:var(--surface-2); border:1px solid var(--line-2);
+  border-radius:7px; padding:7px 9px; appearance:none;
+  background-image:linear-gradient(45deg,transparent 50%,var(--ink-3) 50%),linear-gradient(135deg,var(--ink-3) 50%,transparent 50%);
+  background-position:calc(100% - 15px) 14px,calc(100% - 10px) 14px;
+  background-size:5px 5px,5px 5px; background-repeat:no-repeat;
+}
+select:hover{border-color:var(--accent)}
+
+.legend{border-top:1px solid var(--line); margin-top:14px; padding-top:12px}
+.legend-row{display:flex; gap:8px; align-items:flex-start; font-size:12.5px; color:var(--ink-2); margin-bottom:7px}
+.legend-row:last-child{margin-bottom:0}
+.keycap{
+  font-family:var(--mono); font-size:10.5px; flex:none; min-width:22px; text-align:center;
+  border:1px solid var(--line-2); border-bottom-width:2px; border-radius:4px;
+  padding:1px 4px; color:var(--ink-2); background:var(--surface-2);
+}
+
+/* ---------- deck ---------- */
+.deck-head{display:flex; align-items:baseline; gap:12px; margin-bottom:11px; flex-wrap:wrap}
+.deck-head h2{font-size:17px; font-weight:700}
+.deck-head .count{margin-left:auto}
+
+.stack{position:relative; height:496px}
+.card{
+  position:absolute; inset:0;
+  background:var(--surface); border:1px solid var(--line); border-radius:14px;
+  box-shadow:var(--shadow); padding:20px; display:flex; flex-direction:column;
+  transform-origin:50% 120%; will-change:transform;
+}
+.card[data-depth="0"]{box-shadow:var(--shadow-lift); cursor:grab; touch-action:pan-y}
+.card[data-depth="0"].dragging{cursor:grabbing; transition:none}
+.card[data-depth="1"]{transform:translateY(11px) scale(.972); z-index:-1}
+.card[data-depth="2"]{transform:translateY(21px) scale(.944); z-index:-2}
+.card.settle{transition:transform .32s cubic-bezier(.2,.8,.3,1)}
+.card.gone{transition:transform .34s ease-in,opacity .34s ease-in; opacity:0}
+
+.c-head{display:flex; gap:12px; align-items:flex-start}
+.c-mark{
+  width:46px; height:46px; flex:none; border-radius:9px; display:grid; place-items:center;
+  font-family:var(--display); font-weight:700; font-size:16px;
+  background:var(--surface-3); color:var(--ink); border:1px solid var(--line-2);
+}
+.c-head h3{font-size:19px; font-weight:700; line-height:1.2}
+.c-meta{font-size:13px; color:var(--ink-2); margin-top:2px}
+.c-score{margin-left:auto; text-align:right; flex:none}
+.c-score b{display:block; font-family:var(--mono); font-size:22px; font-weight:600; color:var(--accent); line-height:1}
+.c-score .label{font-size:9.5px}
+
+.chips{display:flex; flex-wrap:wrap; gap:6px; margin:14px 0 0}
+.chip{
+  font-family:var(--mono); font-size:10.5px; letter-spacing:.06em; text-transform:uppercase;
+  padding:3.5px 8px; border-radius:5px; border:1px solid var(--line-2); color:var(--ink-2);
+  background:var(--surface-2);
+}
+.chip.intent{background:var(--accent-soft); color:var(--accent-ink); border-color:color-mix(in srgb,var(--accent) 34%,transparent)}
+.chip.verified{background:var(--amber-soft); color:var(--amber); border-color:color-mix(in srgb,var(--amber) 30%,transparent)}
+
+.seeking{
+  margin-top:15px; padding:13px 14px; border-radius:9px;
+  background:var(--surface-2); border:1px solid var(--line);
+  border-left:3px solid var(--accent);
+}
+.seeking .label{display:block; margin-bottom:4px}
+.seeking p{margin:0; font-size:14.5px; line-height:1.45}
+
+.terms{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:1px; margin-top:15px;
+  background:var(--line); border:1px solid var(--line); border-radius:9px; overflow:hidden;
+}
+.term{background:var(--surface); padding:9px 11px}
+.term .label{display:block; margin-bottom:2px}
+.term b{font-family:var(--mono); font-size:13.5px; font-weight:500; font-variant-numeric:tabular-nums}
+
+.blurb{margin:14px 0 0; font-size:14px; color:var(--ink-2); line-height:1.5}
+
+.c-foot{margin-top:auto; padding-top:14px; border-top:1px solid var(--line); display:flex; align-items:center; gap:10px}
+.c-foot .who{font-size:13px; color:var(--ink-2)}
+.c-foot .who b{font-weight:600; color:var(--ink)}
+.warm{
+  margin-left:auto; font-family:var(--mono); font-size:10.5px; letter-spacing:.07em; text-transform:uppercase;
+  color:var(--amber); display:flex; align-items:center; gap:5px; white-space:nowrap;
+}
+.warm::before{content:""; width:6px; height:6px; border-radius:50%; background:var(--amber)}
+
+.stamp{
+  position:absolute; top:26px; font-family:var(--display); font-weight:800; font-size:26px;
+  letter-spacing:.06em; padding:5px 12px; border:3px solid; border-radius:7px;
+  opacity:0; pointer-events:none;
+}
+.stamp.yes{left:24px; transform:rotate(-11deg); color:var(--accent); border-color:var(--accent)}
+.stamp.no{right:24px; transform:rotate(11deg); color:var(--pass); border-color:var(--pass)}
+
+.empty{
+  position:absolute; inset:0; display:grid; place-content:center; text-align:center; gap:10px;
+  border:1px dashed var(--line-2); border-radius:14px; padding:30px;
+}
+.empty h3{font-size:18px}
+.empty p{margin:0; color:var(--ink-2); font-size:14px; max-width:34ch}
+
+.actions{display:flex; gap:10px; justify-content:center; margin-top:18px}
+.act{
+  border-radius:9px; border:1px solid var(--line-2); background:var(--surface);
+  padding:11px 20px; font-family:var(--display); font-weight:600; font-size:14.5px;
+  display:flex; align-items:center; gap:8px; transition:transform .12s ease;
+}
+.act:hover:not(:disabled){transform:translateY(-1px)}
+.act:disabled{opacity:.42; cursor:not-allowed}
+.act.pass{color:var(--pass); border-color:color-mix(in srgb,var(--pass) 40%,var(--line-2))}
+.act.pass:hover:not(:disabled){background:var(--pass-soft)}
+.act.yes{color:#fff; background:var(--accent); border-color:var(--accent)}
+.act.yes:hover:not(:disabled){background:var(--accent-ink)}
+.act.undo{color:var(--ink-2)}
+
+/* ---------- right rail ---------- */
+.bars{display:flex; flex-direction:column; gap:9px}
+.bar-row{display:grid; grid-template-columns:1fr auto; gap:3px 8px; font-size:12.5px}
+.bar-row .n{font-family:var(--mono); font-variant-numeric:tabular-nums; color:var(--ink-3); font-size:11.5px}
+.track{grid-column:1/-1; height:5px; border-radius:3px; background:var(--surface-3); overflow:hidden}
+.track i{display:block; height:100%; background:var(--accent); border-radius:3px; transition:width .35s ease}
+.track i.weak{background:var(--ink-3)}
+
+.total{
+  display:flex; align-items:baseline; gap:8px; margin-top:14px;
+  padding-top:12px; border-top:1px solid var(--line);
+}
+.total b{font-family:var(--mono); font-size:26px; font-weight:600; color:var(--accent); line-height:1}
+.total span{font-size:12.5px; color:var(--ink-2)}
+
+.match-list{display:flex; flex-direction:column; gap:1px; background:var(--line); border:1px solid var(--line); border-radius:8px; overflow:hidden}
+.match-row{display:flex; gap:9px; align-items:center; background:var(--surface); padding:9px 11px; text-align:left; border:0; width:100%}
+.match-row:hover{background:var(--surface-2)}
+.match-row .mm{
+  width:26px; height:26px; flex:none; border-radius:6px; display:grid; place-items:center;
+  background:var(--accent-soft); color:var(--accent-ink); font-family:var(--display); font-size:10.5px; font-weight:700;
+}
+.match-row .mt{min-width:0}
+.match-row .mt strong{display:block; font-size:13.5px; font-weight:600; white-space:nowrap; overflow:hidden; text-overflow:ellipsis}
+.match-row .mt span{font-size:11.5px; color:var(--ink-3)}
+.match-row .ms{margin-left:auto; font-family:var(--mono); font-size:12px; color:var(--accent)}
+.muted{font-size:13px; color:var(--ink-3); margin:0}
+
+.funnel{display:flex; flex-direction:column; gap:8px}
+.f-row{display:flex; align-items:baseline; gap:8px; font-size:13px; color:var(--ink-2)}
+.f-row b{font-family:var(--mono); font-size:16px; font-weight:600; color:var(--ink); min-width:34px; font-variant-numeric:tabular-nums}
+.f-note{margin:12px 0 0; font-size:12px; color:var(--ink-3); line-height:1.45; border-top:1px solid var(--line); padding-top:10px}
+
+/* ---------- match modal ---------- */
+.scrim{
+  position:fixed; inset:0; background:color-mix(in srgb,var(--ink) 58%,transparent);
+  display:grid; place-items:center; padding:20px; z-index:50;
+}
+.modal{
+  background:var(--surface); border:1px solid var(--line-2); border-radius:14px;
+  box-shadow:var(--shadow-lift); max-width:520px; width:100%; padding:24px;
+  max-height:90vh; overflow-y:auto;
+}
+.modal .kicker{display:block; color:var(--accent); margin-bottom:8px}
+.modal h2{font-size:24px; font-weight:800; margin-bottom:6px}
+.modal > p{margin:0 0 16px; color:var(--ink-2); font-size:14.5px}
+.draft{
+  width:100%; font-family:var(--body); font-size:14px; line-height:1.5; color:var(--ink);
+  background:var(--surface-2); border:1px solid var(--line-2); border-radius:9px;
+  padding:12px; min-height:142px; resize:vertical;
+}
+.modal-acts{display:flex; gap:9px; margin-top:14px; flex-wrap:wrap}
+
+@media (max-width:1080px){
+  .grid{grid-template-columns:minmax(0,1fr) 292px}
+  .rail-left{grid-column:1/-1; display:grid; grid-template-columns:1fr 1fr; gap:16px}
+  .rail-left .panel{margin-bottom:0}
+}
+@media (max-width:760px){
+  .wrap{padding-inline:16px}
+  .grid{grid-template-columns:minmax(0,1fr)}
+  .rail-left{grid-template-columns:1fr}
+  .stack{height:540px}
+  .terms{grid-template-columns:1fr 1fr}
+  .brand{width:100%}
+}
+</style>
+
+<div class="wrap">
+  <header class="topbar">
+    <div class="brand">
+      <h1>Deal<span class="dot">.</span>Deck</h1>
+      <span class="tag">Intent-matched counterparties, US market</span>
+    </div>
+    <span class="demo-pill">Prototype · sample data</span>
+    <button class="ghost-btn" id="themeBtn" type="button">Theme</button>
+    <button class="ghost-btn" id="resetBtn" type="button">Reset deck</button>
+  </header>
+
+  <div class="grid">
+    <aside class="rail-left">
+      <section class="panel">
+        <span class="label">Your desk</span>
+        <div class="me">
+          <div class="mark">NV</div>
+          <div>
+            <strong>Northvale Systems</strong>
+            <span>Chicago, IL · 34 employees</span>
+          </div>
+        </div>
+        <label class="field" for="f-intent">
+          <span class="label">I am looking to</span>
+          <select id="f-intent">
+            <option value="buy">Buy — find a vendor</option>
+            <option value="sell" selected>Sell — find customers</option>
+            <option value="partner">Partner — channel or referral</option>
+            <option value="invest">Raise — find capital</option>
+          </select>
+        </label>
+        <label class="field" for="f-industry">
+          <span class="label">Industry focus</span>
+          <select id="f-industry">
+            <option value="any">Any industry</option>
+            <option value="Logistics">Logistics &amp; freight</option>
+            <option value="Healthcare">Healthcare services</option>
+            <option value="Manufacturing" selected>Manufacturing</option>
+            <option value="Construction">Construction</option>
+            <option value="Retail">Retail &amp; e-commerce</option>
+            <option value="Professional services">Professional services</option>
+          </select>
+        </label>
+        <label class="field" for="f-region">
+          <span class="label">Region</span>
+          <select id="f-region">
+            <option value="any">Nationwide</option>
+            <option value="Midwest" selected>Midwest</option>
+            <option value="Northeast">Northeast</option>
+            <option value="South">South</option>
+            <option value="West">West</option>
+          </select>
+        </label>
+        <label class="field" for="f-size">
+          <span class="label">Deal size</span>
+          <select id="f-size">
+            <option value="25000">$10K – $50K</option>
+            <option value="150000" selected>$50K – $250K</option>
+            <option value="600000">$250K – $1M</option>
+            <option value="2500000">$1M+</option>
+          </select>
+        </label>
+        <label class="field" for="f-timeline" style="margin-bottom:0">
+          <span class="label">Timeline</span>
+          <select id="f-timeline">
+            <option value="30">Signing in 30 days</option>
+            <option value="90" selected>This quarter</option>
+            <option value="180">Next 6 months</option>
+          </select>
+        </label>
+      </section>
+
+      <section class="panel">
+        <span class="label">Controls</span>
+        <div class="legend">
+          <div class="legend-row"><span class="keycap">←</span><span>Pass — removed from your deck</span></div>
+          <div class="legend-row"><span class="keycap">→</span><span>Connect — request an intro</span></div>
+          <div class="legend-row"><span class="keycap">Z</span><span>Undo the last card</span></div>
+          <div class="legend-row"><span class="keycap">↕</span><span>Or drag the card sideways</span></div>
+        </div>
+      </section>
+    </aside>
+
+    <section>
+      <div class="deck-head">
+        <h2>Today's deck</h2>
+        <span class="label count" id="deckCount">12 accounts left</span>
+      </div>
+      <div class="stack" id="stack"></div>
+      <div class="actions">
+        <button class="act pass" id="passBtn" type="button">Pass</button>
+        <button class="act undo" id="undoBtn" type="button" disabled>Undo</button>
+        <button class="act yes" id="yesBtn" type="button">Connect</button>
+      </div>
+    </section>
+
+    <aside>
+      <section class="panel">
+        <span class="label">Why this account</span>
+        <div class="bars" id="bars"></div>
+        <div class="total"><b id="totalScore">—</b><span id="totalNote">fit score</span></div>
+      </section>
+
+      <section class="panel">
+        <span class="label">Mutual interest</span>
+        <div id="matchesBox"><p class="muted">No matches yet. A match happens only when both sides connect.</p></div>
+      </section>
+
+      <section class="panel" style="margin-bottom:0">
+        <span class="label">Funnel</span>
+        <div class="funnel">
+          <div class="f-row"><b id="mReviewed">0</b> accounts reviewed</div>
+          <div class="f-row"><b id="mConnects">0</b> connect requests</div>
+          <div class="f-row"><b id="mMatches">0</b> mutual matches</div>
+          <div class="f-row"><b id="mRate">—</b> match rate on connects</div>
+        </div>
+        <p class="f-note">Liquidity test: a two-sided market needs roughly 1 in 5 connects to become a match, or the deck feels empty.</p>
+      </section>
+    </aside>
+  </div>
+</div>
+
+<div class="scrim" id="scrim" hidden>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="mTitle">
+    <span class="label kicker">Mutual interest</span>
+    <h2 id="mTitle">It's a match</h2>
+    <p id="mSub"></p>
+    <label class="label" for="draft" style="display:block; margin-bottom:6px">Intro message — edit before sending</label>
+    <textarea class="draft" id="draft"></textarea>
+    <div class="modal-acts">
+      <button class="act yes" id="sendBtn" type="button">Send intro</button>
+      <button class="act" id="copyBtn" type="button">Copy</button>
+      <button class="act undo" id="laterBtn" type="button">Later</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const COMPANIES = [
+  {id:"c1",name:"Ridgeway Cold Chain",init:"RC",intent:"buy",industry:"Logistics",naics:"493120",metro:"Columbus, OH",region:"Midwest",heads:"210",revenue:"$48M",min:80000,max:400000,days:60,
+   seeking:"A vendor to retrofit temperature telemetry across 40 reefer trailers before the Q1 audit.",
+   badges:["D-U-N-S verified","SOC 2 required","Net 45"],role:"VP Operations",contact:"Dana Whitfield",likesYou:true,
+   blurb:"Regional cold-chain carrier serving grocery DCs across the Great Lakes. Replacing a legacy telematics contract that expires in March."},
+  {id:"c2",name:"Halbert Precision",init:"HP",intent:"buy",industry:"Manufacturing",naics:"332710",metro:"Grand Rapids, MI",region:"Midwest",heads:"85",revenue:"$21M",min:50000,max:250000,days:45,
+   seeking:"CNC shop floor scheduling software with ERP hooks — replacing spreadsheets on 12 machines.",
+   badges:["D-U-N-S verified","Net 30","RFP open"],role:"Plant Manager",contact:"Marcus Oyelaran",likesYou:true,
+   blurb:"Tier-2 automotive machining supplier. Two failed software rollouts in four years; buying committee is three people and wants a pilot line first."},
+  {id:"c3",name:"Saltmarsh Health Partners",init:"SH",intent:"buy",industry:"Healthcare",naics:"621111",metro:"Charleston, SC",region:"South",heads:"430",revenue:"$96M",min:250000,max:900000,days:120,
+   seeking:"Revenue-cycle automation vendor with HIPAA BAA and live Epic integration references.",
+   badges:["HIPAA BAA","SOC 2 Type II","Net 60"],role:"Chief Financial Officer",contact:"Priya Raghunathan",likesYou:false,
+   blurb:"Eleven-clinic ambulatory group. Procurement runs a formal RFP; expect security review before any pricing conversation."},
+  {id:"c4",name:"Beacon Hill Components",init:"BH",intent:"partner",industry:"Manufacturing",naics:"335313",metro:"Worcester, MA",region:"Northeast",heads:"140",revenue:"$37M",min:100000,max:500000,days:90,
+   seeking:"A reseller channel in the Midwest for our industrial control panels — 18% margin, co-marketing budget.",
+   badges:["D-U-N-S verified","UL listed","Net 30"],role:"Director of Channel",contact:"Ellis Traynor",likesYou:true,
+   blurb:"Panel builder with UL 508A certification looking to expand beyond New England without hiring field sales."},
+  {id:"c5",name:"Kestrel Freight Brokers",init:"KF",intent:"partner",industry:"Logistics",naics:"488510",metro:"Kansas City, MO",region:"Midwest",heads:"62",revenue:"$14M",min:25000,max:150000,days:30,
+   seeking:"Referral partners in manufacturing who need LTL capacity on lanes we already run half-empty.",
+   badges:["FMCSA authority","$1M cargo","Net 15"],role:"Head of Growth",contact:"Tessa Okonkwo",likesYou:false,
+   blurb:"Asset-light broker with steady Midwest lanes. Pays 8% on referred freight for the first 12 months."},
+  {id:"c6",name:"Alder & Voss LLP",init:"AV",intent:"sell",industry:"Professional services",naics:"541110",metro:"Minneapolis, MN",region:"Midwest",heads:"48",revenue:"$19M",min:15000,max:120000,days:30,
+   seeking:"Mid-market manufacturers that need supplier contract review and export compliance counsel.",
+   badges:["Bar verified","E&O insured","Net 30"],role:"Managing Partner",contact:"Ruth Calderón",likesYou:false,
+   blurb:"Boutique commercial firm. Flat-fee contract packages rather than hourly — unusual for the segment and a real differentiator."},
+  {id:"c7",name:"Tallgrass Industrial Supply",init:"TI",intent:"sell",industry:"Manufacturing",naics:"423840",metro:"Omaha, NE",region:"Midwest",heads:"96",revenue:"$28M",min:20000,max:200000,days:45,
+   seeking:"Plants running 24/5 that want vendor-managed inventory on bearings, seals and fasteners.",
+   badges:["D-U-N-S verified","ISO 9001","Net 30"],role:"Regional Sales Director",contact:"Bo Lindqvist",likesYou:false,
+   blurb:"Distributor moving from transactional orders to VMI contracts. Wants three pilot plants before committing warehouse space."},
+  {id:"c8",name:"Cobalt Ridge Capital",init:"CR",intent:"invest",industry:"Manufacturing",naics:"523999",metro:"Cleveland, OH",region:"Midwest",heads:"11",revenue:"$60M AUM",min:1000000,max:6000000,days:180,
+   seeking:"Profitable Midwest industrial businesses, $2M–$10M revenue, for majority recapitalization.",
+   badges:["SEC registered","Committed fund","Closed 6 deals"],role:"Partner",contact:"Adaeze Mbanefo",likesYou:false,
+   blurb:"Search-fund style operator group. Prefers owner-operators planning a five-year exit over pure growth equity stories."},
+  {id:"c9",name:"Pinehurst Facilities Group",init:"PF",intent:"buy",industry:"Construction",naics:"238220",metro:"Raleigh, NC",region:"South",heads:"310",revenue:"$72M",min:150000,max:700000,days:90,
+   seeking:"Mechanical subcontractor for a 14-site HVAC retrofit program starting in spring.",
+   badges:["Bonded","OSHA 30","Net 45"],role:"Director of Procurement",contact:"Garrett Nkemelu",likesYou:false,
+   blurb:"Commercial GC managing a rolling retrofit program. Requires bonding capacity of $2M and prevailing-wage compliance."},
+  {id:"c10",name:"Willowbrook Diagnostics",init:"WD",intent:"sell",industry:"Healthcare",naics:"621511",metro:"Newark, NJ",region:"Northeast",heads:"175",revenue:"$41M",min:60000,max:300000,days:60,
+   seeking:"Self-insured employers of 200+ who want on-site lab panels instead of clinic referrals.",
+   badges:["CLIA certified","HIPAA BAA","Net 30"],role:"VP Business Development",contact:"Simone Achebe",likesYou:true,
+   blurb:"Regional lab network expanding into occupational health. Pricing is per-employee per-year, which shortens procurement cycles."},
+  {id:"c11",name:"Fairmont Pallet Works",init:"FP",intent:"sell",industry:"Manufacturing",naics:"321920",metro:"Peoria, IL",region:"Midwest",heads:"58",revenue:"$12M",min:30000,max:180000,days:30,
+   seeking:"Manufacturers shipping 500+ pallets a month who want a recycled-pallet program with pickup.",
+   badges:["D-U-N-S verified","ISPM-15","Net 30"],role:"Owner",contact:"Hank Brzezinski",likesYou:false,
+   blurb:"Family-owned pallet recycler. Closed-loop pickup program typically cuts pallet spend 22% — sells on unit economics, not relationship."},
+  {id:"c12",name:"Verity Sourcing Collective",init:"VS",intent:"partner",industry:"Retail",naics:"425120",metro:"Portland, OR",region:"West",heads:"27",revenue:"$9M",min:40000,max:220000,days:60,
+   seeking:"US contract manufacturers who can take reshored production runs from our apparel and hardgoods clients.",
+   badges:["Buyer network","Net 30","Audited suppliers"],role:"Head of Supply",contact:"Noor Haddadi",likesYou:false,
+   blurb:"Sourcing agency moving clients off Asian suppliers under tariff pressure. Brings the demand; needs qualified domestic capacity."}
+];
+
+const COMPLEMENT = {buy:"sell", sell:"buy", partner:"partner", invest:"sell"};
+const ADJACENT = {
+  Manufacturing:["Logistics","Construction"],
+  Logistics:["Manufacturing","Retail"],
+  Healthcare:["Professional services"],
+  Construction:["Manufacturing","Professional services"],
+  Retail:["Logistics"],
+  "Professional services":["Healthcare","Construction"]
+};
+const INTENT_WORD = {buy:"Buying", sell:"Selling", partner:"Partnering", invest:"Investing"};
+const KEY = "dealdeck.v2";
+
+let state = {decisions:{}, matches:[], reviewed:0, connects:0};
+let history = [];
+let prefs = {};
+
+function load(){
+  try{
+    const raw = localStorage.getItem(KEY);
+    if(raw) state = Object.assign(state, JSON.parse(raw));
+  }catch(e){}
+}
+function save(){
+  try{ localStorage.setItem(KEY, JSON.stringify(state)); }catch(e){}
+}
+
+function readPrefs(){
+  prefs = {
+    intent: document.getElementById("f-intent").value,
+    industry: document.getElementById("f-industry").value,
+    region: document.getElementById("f-region").value,
+    size: Number(document.getElementById("f-size").value),
+    days: Number(document.getElementById("f-timeline").value)
+  };
+}
+
+function breakdown(c){
+  const want = COMPLEMENT[prefs.intent];
+  const rows = [];
+
+  let intentPts = 0, intentNote = "Both sides are on the same side of the table";
+  if(c.intent === want){ intentPts = 35; intentNote = INTENT_WORD[c.intent] + " — complements your " + prefs.intent + " intent"; }
+  else if(prefs.intent === "partner" && c.intent === "partner"){ intentPts = 35; intentNote = "Both open to channel partnership"; }
+  else if(c.intent === "invest" && prefs.intent === "invest"){ intentPts = 35; intentNote = "Deploying capital into your segment"; }
+  else if(c.intent === "partner" || want === "partner"){ intentPts = 16; intentNote = "Partnership angle, not a direct deal"; }
+  rows.push({k:"Intent fit", pts:intentPts, max:35, note:intentNote});
+
+  let indPts = 0, indNote = c.industry + " — outside your focus";
+  if(prefs.industry === "any"){ indPts = 13; indNote = c.industry + " — no industry filter set"; }
+  else if(c.industry === prefs.industry){ indPts = 20; indNote = c.industry + " — direct match"; }
+  else if((ADJACENT[prefs.industry]||[]).includes(c.industry)){ indPts = 11; indNote = c.industry + " — adjacent to your focus"; }
+  rows.push({k:"Industry", pts:indPts, max:20, note:indNote});
+
+  let regPts = 5, regNote = c.metro + " — outside your region";
+  if(prefs.region === "any"){ regPts = 12; regNote = c.metro + " — nationwide search"; }
+  else if(c.region === prefs.region){ regPts = 15; regNote = c.metro + " — in " + c.region; }
+  rows.push({k:"Geography", pts:regPts, max:15, note:regNote});
+
+  const overlap = Math.min(c.max, prefs.size*2.2) - Math.max(c.min, prefs.size*0.45);
+  let sizePts = 0, sizeNote = "Deal band " + money(c.min) + "–" + money(c.max) + " misses yours";
+  if(overlap > 0){
+    const span = c.max - c.min || 1;
+    sizePts = Math.round(Math.min(1, overlap/span) * 20);
+    sizeNote = money(c.min) + "–" + money(c.max) + " overlaps your band";
+  }
+  rows.push({k:"Deal size", pts:sizePts, max:20, note:sizeNote});
+
+  let timePts = c.days <= prefs.days ? 10 : (c.days <= prefs.days*2 ? 5 : 1);
+  rows.push({k:"Timeline", pts:timePts, max:10, note:c.days + "-day cycle vs your " + prefs.days + "-day target"});
+
+  const total = rows.reduce((a,r)=>a+r.pts, 0);
+  return {rows, total};
+}
+
+function money(n){
+  if(n >= 1000000) return "$" + (n/1000000).toFixed(n % 1000000 ? 1 : 0) + "M";
+  return "$" + Math.round(n/1000) + "K";
+}
+
+function deck(){
+  return COMPANIES
+    .filter(c => !state.decisions[c.id])
+    .map(c => ({c, s:breakdown(c)}))
+    .sort((a,b) => b.s.total - a.s.total);
+}
+
+function cardHTML(c, s, depth){
+  const chips = [
+    '<span class="chip intent">' + INTENT_WORD[c.intent] + '</span>',
+    '<span class="chip">NAICS ' + c.naics + '</span>',
+    '<span class="chip">' + c.heads + ' employees</span>',
+    '<span class="chip">' + c.revenue + '</span>'
+  ].concat(c.badges.map(b => '<span class="chip verified">' + b + '</span>')).join("");
+  return '' +
+  '<div class="stamp yes">CONNECT</div><div class="stamp no">PASS</div>' +
+  '<div class="c-head">' +
+    '<div class="c-mark">' + c.init + '</div>' +
+    '<div><h3>' + c.name + '</h3><div class="c-meta">' + c.industry + ' · ' + c.metro + '</div></div>' +
+    '<div class="c-score"><b>' + s.total + '</b><span class="label">fit</span></div>' +
+  '</div>' +
+  '<div class="chips">' + chips + '</div>' +
+  '<div class="seeking"><span class="label">Looking for</span><p>' + c.seeking + '</p></div>' +
+  '<div class="terms">' +
+    '<div class="term"><span class="label">Deal band</span><b>' + money(c.min) + '–' + money(c.max) + '</b></div>' +
+    '<div class="term"><span class="label">Cycle</span><b>' + c.days + ' days</b></div>' +
+    '<div class="term"><span class="label">Region</span><b>' + c.region + '</b></div>' +
+  '</div>' +
+  '<p class="blurb">' + c.blurb + '</p>' +
+  '<div class="c-foot">' +
+    '<span class="who"><b>' + c.contact + '</b> · ' + c.role + '</span>' +
+    (c.likesYou ? '<span class="warm">Already interested</span>' : '') +
+  '</div>';
+}
+
+const stack = document.getElementById("stack");
+let current = null;
+
+function render(){
+  const d = deck();
+  current = d[0] || null;
+  stack.innerHTML = "";
+
+  if(!d.length){
+    stack.innerHTML = '<div class="empty"><h3>Deck cleared for today</h3>' +
+      '<p>New accounts are released each morning so the deck stays scarce — that is what keeps reply rates high. Reset to run the demo again.</p></div>';
+  } else {
+    d.slice(0,3).reverse().forEach(item => {
+      const el = document.createElement("article");
+      el.className = "card";
+      el.dataset.depth = String(d.indexOf(item));
+      el.innerHTML = cardHTML(item.c, item.s, d.indexOf(item));
+      stack.appendChild(el);
+    });
+    attachDrag();
+  }
+
+  document.getElementById("deckCount").textContent = d.length + (d.length === 1 ? " account left" : " accounts left");
+  document.getElementById("passBtn").disabled = !current;
+  document.getElementById("yesBtn").disabled = !current;
+  document.getElementById("undoBtn").disabled = !history.length;
+  renderBars();
+  renderMatches();
+  renderFunnel();
+}
+
+function renderBars(){
+  const box = document.getElementById("bars");
+  if(!current){
+    box.innerHTML = '<p class="muted">No card in focus.</p>';
+    document.getElementById("totalScore").textContent = "—";
+    document.getElementById("totalNote").textContent = "fit score";
+    return;
+  }
+  box.innerHTML = current.s.rows.map(r => {
+    const pct = Math.round(r.pts / r.max * 100);
+    return '<div class="bar-row"><span>' + r.note + '</span><span class="n">' + r.pts + '/' + r.max + '</span>' +
+      '<span class="track"><i class="' + (pct < 45 ? "weak" : "") + '" style="width:' + pct + '%"></i></span></div>';
+  }).join("");
+  document.getElementById("totalScore").textContent = current.s.total;
+  document.getElementById("totalNote").textContent = "fit score for " + current.c.name;
+}
+
+function renderMatches(){
+  const box = document.getElementById("matchesBox");
+  if(!state.matches.length){
+    box.innerHTML = '<p class="muted">No matches yet. A match happens only when both sides connect.</p>';
+    return;
+  }
+  box.innerHTML = '<div class="match-list">' + state.matches.map(id => {
+    const c = COMPANIES.find(x => x.id === id);
+    const s = breakdown(c);
+    return '<button class="match-row" type="button" data-open="' + c.id + '">' +
+      '<span class="mm">' + c.init + '</span>' +
+      '<span class="mt"><strong>' + c.name + '</strong><span>' + c.contact + ' · ' + c.role + '</span></span>' +
+      '<span class="ms">' + s.total + '</span></button>';
+  }).join("") + '</div>';
+  box.querySelectorAll("[data-open]").forEach(b => {
+    b.addEventListener("click", () => openMatch(COMPANIES.find(x => x.id === b.dataset.open)));
+  });
+}
+
+function renderFunnel(){
+  document.getElementById("mReviewed").textContent = state.reviewed;
+  document.getElementById("mConnects").textContent = state.connects;
+  document.getElementById("mMatches").textContent = state.matches.length;
+  document.getElementById("mRate").textContent = state.connects
+    ? Math.round(state.matches.length / state.connects * 100) + "%" : "—";
+}
+
+/* ---------- decisions ---------- */
+function decide(action){
+  if(!current) return;
+  const c = current.c;
+  const matched = action === "like" && c.likesYou;
+
+  const top = stack.querySelector('[data-depth="0"]');
+  if(top){
+    top.classList.add("gone");
+    top.style.transform = "translateX(" + (action === "like" ? 620 : -620) + "px) rotate(" + (action === "like" ? 22 : -22) + "deg)";
+  }
+
+  state.decisions[c.id] = action;
+  state.reviewed++;
+  if(action === "like") state.connects++;
+  if(matched) state.matches.push(c.id);
+  history.push({id:c.id, action, matched});
+  save();
+
+  setTimeout(() => {
+    render();
+    if(matched) openMatch(c);
+  }, 240);
+}
+
+function undo(){
+  const last = history.pop();
+  if(!last) return;
+  delete state.decisions[last.id];
+  state.reviewed = Math.max(0, state.reviewed - 1);
+  if(last.action === "like") state.connects = Math.max(0, state.connects - 1);
+  if(last.matched) state.matches = state.matches.filter(id => id !== last.id);
+  save();
+  render();
+}
+
+/* ---------- match modal ---------- */
+const scrim = document.getElementById("scrim");
+function openMatch(c){
+  document.getElementById("mSub").textContent =
+    c.name + " connected too. " + c.contact + " (" + c.role + ") can see your profile and this note.";
+  document.getElementById("draft").value = draftFor(c);
+  scrim.hidden = false;
+  document.getElementById("draft").focus();
+}
+function draftFor(c){
+  const open = {
+    buy: "we build exactly what you described",
+    sell: "we may be the buyer you are looking for",
+    partner: "a channel arrangement could work both ways",
+    invest: "your thesis lines up with where we are"
+  }[c.intent] || "there may be a fit";
+  return "Hi " + c.contact.split(" ")[0] + " — Northvale Systems, " +
+    "a 34-person manufacturer in Chicago.\n\n" +
+    "You posted that you are looking for: " + c.seeking.toLowerCase() + "\n\n" +
+    "Reading that, " + open + ". We work in the " + money(c.min) + "–" + money(c.max) +
+    " range and can move inside your " + c.days + "-day cycle.\n\n" +
+    "Worth 20 minutes this week? I can bring two references in " + c.industry.toLowerCase() + ".";
+}
+document.getElementById("laterBtn").addEventListener("click", () => { scrim.hidden = true; });
+document.getElementById("sendBtn").addEventListener("click", () => {
+  const b = document.getElementById("sendBtn");
+  b.textContent = "Intro sent";
+  setTimeout(() => { scrim.hidden = true; b.textContent = "Send intro"; }, 700);
+});
+document.getElementById("copyBtn").addEventListener("click", async () => {
+  const t = document.getElementById("draft");
+  const b = document.getElementById("copyBtn");
+  try{ await navigator.clipboard.writeText(t.value); b.textContent = "Copied"; }
+  catch(e){ t.select(); b.textContent = "Press Ctrl+C"; }
+  setTimeout(() => { b.textContent = "Copy"; }, 1400);
+});
+scrim.addEventListener("click", e => { if(e.target === scrim) scrim.hidden = true; });
+
+/* ---------- drag ---------- */
+function attachDrag(){
+  const card = stack.querySelector('[data-depth="0"]');
+  if(!card) return;
+  const yes = card.querySelector(".stamp.yes");
+  const no = card.querySelector(".stamp.no");
+  let x0 = 0, dx = 0, active = false;
+
+  card.addEventListener("pointerdown", e => {
+    if(e.target.closest("button")) return;
+    active = true; x0 = e.clientX; dx = 0;
+    card.setPointerCapture(e.pointerId);
+    card.classList.add("dragging");
+  });
+  card.addEventListener("pointermove", e => {
+    if(!active) return;
+    dx = e.clientX - x0;
+    card.style.transform = "translateX(" + dx + "px) rotate(" + (dx/26) + "deg)";
+    yes.style.opacity = Math.max(0, Math.min(1, dx/110));
+    no.style.opacity = Math.max(0, Math.min(1, -dx/110));
+  });
+  const end = () => {
+    if(!active) return;
+    active = false;
+    card.classList.remove("dragging");
+    if(Math.abs(dx) > 110){ decide(dx > 0 ? "like" : "pass"); return; }
+    card.classList.add("settle");
+    card.style.transform = "";
+    yes.style.opacity = 0; no.style.opacity = 0;
+    setTimeout(() => card.classList.remove("settle"), 320);
+  };
+  card.addEventListener("pointerup", end);
+  card.addEventListener("pointercancel", end);
+}
+
+/* ---------- wiring ---------- */
+document.getElementById("passBtn").addEventListener("click", () => decide("pass"));
+document.getElementById("yesBtn").addEventListener("click", () => decide("like"));
+document.getElementById("undoBtn").addEventListener("click", undo);
+document.addEventListener("keydown", e => {
+  if(!scrim.hidden){ if(e.key === "Escape") scrim.hidden = true; return; }
+  if(e.target.tagName === "SELECT" || e.target.tagName === "TEXTAREA") return;
+  if(e.key === "ArrowRight") decide("like");
+  else if(e.key === "ArrowLeft") decide("pass");
+  else if(e.key.toLowerCase() === "z") undo();
+});
+["f-intent","f-industry","f-region","f-size","f-timeline"].forEach(id => {
+  document.getElementById(id).addEventListener("change", () => { readPrefs(); render(); });
+});
+document.getElementById("resetBtn").addEventListener("click", () => {
+  state = {decisions:{}, matches:[], reviewed:0, connects:0};
+  history = [];
+  save(); render();
+});
+document.getElementById("themeBtn").addEventListener("click", () => {
+  const cur = document.documentElement.getAttribute("data-theme");
+  const dark = cur ? cur === "dark" : matchMedia("(prefers-color-scheme: dark)").matches;
+  document.documentElement.setAttribute("data-theme", dark ? "light" : "dark");
+});
+
+load(); readPrefs(); render();
+</script>
