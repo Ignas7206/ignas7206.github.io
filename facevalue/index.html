@@ -237,17 +237,8 @@ button{font:inherit; color:inherit; cursor:pointer}
   background:var(--surface-2); display:grid; place-items:center; font-family:var(--mono); font-size:10px; color:var(--ink-3)}
 .opt strong{display:block; font-family:var(--display); font-size:16px; font-weight:600; line-height:1.25}
 .opt span{display:block; font-size:13.5px; color:var(--ink-2); margin-top:2px}
-.opt.big{padding:18px}
-.opt.big strong{font-size:19px}
 .obfoot{display:flex; align-items:center; gap:10px; margin-top:22px; flex-wrap:wrap}
 .obfoot .label{margin-right:auto}
-.wall{margin-top:26px; border:1px solid var(--line); border-left:3px solid var(--hot); border-radius:11px;
-  background:var(--surface); padding:13px 15px}
-.wall .label{display:block; color:var(--hot); margin-bottom:5px}
-.wall p{margin:0; font-size:13.5px; color:var(--ink-2); line-height:1.45}
-.peek{display:flex; gap:7px; margin-top:24px}
-.peek div{flex:1; height:58px; border:1px dashed var(--line-2); border-radius:9px; display:grid; place-items:center;
-  font-family:var(--display); font-weight:700; font-size:15px; color:var(--ink-3); opacity:.55}
 .preview{display:flex; justify-content:center; margin-top:24px}
 .preview .card{position:relative; inset:auto; width:100%; max-width:396px; height:auto; min-height:0}
 .selfnote{display:flex; gap:10px; align-items:flex-start; margin-top:15px; padding:11px 12px;
@@ -258,15 +249,6 @@ button{font:inherit; color:inherit; cursor:pointer}
 .cityrow select{font:inherit; font-size:14px; color:var(--ink); background:var(--surface); border:1px solid var(--line-2);
   border-radius:9px; padding:9px 11px}
 
-/* ---- pool banner ---- */
-.pool{display:flex; gap:11px; align-items:center; background:var(--surface); border:1px solid var(--line);
-  border-radius:11px; padding:11px 13px; margin-bottom:14px}
-.pool .badge{font-family:var(--mono); font-size:10px; letter-spacing:.11em; text-transform:uppercase;
-  padding:4px 9px; border-radius:6px; white-space:nowrap}
-.pool .badge.business{background:var(--accent-soft); color:var(--accent); border:1px solid color-mix(in srgb,var(--accent) 34%,transparent)}
-.pool .badge.social{background:var(--hot-soft); color:var(--hot); border:1px solid color-mix(in srgb,var(--hot) 34%,transparent)}
-.pool .badge.both{background:var(--gold-soft); color:var(--gold); border:1px solid color-mix(in srgb,var(--gold) 36%,transparent)}
-.pool p{margin:0; font-size:12.5px; color:var(--ink-2); line-height:1.35}
 .mine{display:flex; gap:10px; align-items:center}
 .mine .av{width:34px; height:34px; flex:none; border-radius:9px; display:grid; place-items:center;
   font-family:var(--display); font-weight:700; font-size:12px; background:var(--accent); color:#fff}
@@ -305,8 +287,6 @@ button{font:inherit; color:inherit; cursor:pointer}
   <div class="ob" id="ob"></div>
 
   <div id="app" hidden>
-  <div class="pool" id="poolBar"></div>
-
   <div class="grid">
     <aside class="rail-l">
       <section class="panel">
@@ -394,11 +374,11 @@ button{font:inherit; color:inherit; cursor:pointer}
 
 <script>
 const SETS = {
-  F:{name:"Founders", total:4, mode:"business"},
-  O:{name:"Operators", total:3, mode:"business"},
-  C:{name:"Capital", total:3, mode:"business"},
-  M:{name:"Makers", total:3, mode:"business"},
-  X:{name:"Connectors", total:3, mode:"business"}
+  F:{name:"Founders", total:4},
+  O:{name:"Operators", total:3},
+  C:{name:"Capital", total:3},
+  M:{name:"Makers", total:3},
+  X:{name:"Connectors", total:3}
 };
 const XP = {common:10, uncommon:25, rare:60, legendary:150};
 const RANKS = [
@@ -489,7 +469,6 @@ const PEOPLE = [
    name:"Ruth Calderón", init:"RC", likes:false, seed:[352,44,44]}
 ];
 
-PEOPLE.forEach(p=>{ p.mode = "business"; });
 
 const KEY = "facevalue.v2";
 let state = {profile:null, done:{}, got:[], xp:0, streak:1, lastSet:null, fresh:null};
@@ -525,9 +504,7 @@ function paint(cv, seed){
 const stage = document.getElementById("stage");
 let current = null;
 
-const MODE_LABEL = {business:"Business pool"};
-
-function poolPeople(){ return PEOPLE.filter(p => p.mode === "business"); }
+function poolPeople(){ return PEOPLE; }
 function poolSets(){ return Object.keys(SETS); }
 function queue(){ return poolPeople().filter(p => !state.done[p.id]); }
 
@@ -792,7 +769,7 @@ const Q = {
 const CITIES = ["Chicago, IL","New York, NY","Austin, TX","Denver, CO","Atlanta, GA","Los Angeles, CA","Detroit, MI","Miami, FL"];
 const FLOW = {business:["arch","industry","want","offer","truth"]};
 
-let ob = {step:0, mode:null, gate:null, a:{}, city:CITIES[0]};
+let ob = {step:0, a:{}, city:CITIES[0]};
 const obEl = document.getElementById("ob");
 const appEl = document.getElementById("app");
 
@@ -807,75 +784,26 @@ function buildCard(){
 }
 
 function renderOb(){
-  const flow = ob.mode ? FLOW[ob.mode] : [];
-  const total = 1 + flow.length + 1;
+  const flow = FLOW.business;
+  const total = flow.length + 1;
   const dots = Array.from({length:total}, (_,i)=>
     '<i class="' + (i===ob.step?"on":(i<ob.step?"past":"")) + '"></i>').join("");
 
-  if(ob.gate){
-    const social = ob.gate === "social";
-    obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
-      '<h2>That deck is not dealt yet</h2>' +
-      '<p class="sub">' + (social ? "The social deck" : "The second deck") +
-        ' opens once the business side is dense enough to be worth showing up for. ' +
-        'Launching both at once is exactly how you end up with two empty rooms instead of one full one.</p>' +
-      '<div class="wall"><span class="label">Why you are reading this</span>' +
-        '<p>A deck needs roughly fifteen good cards a week per person or nobody comes back. One city and one intent can reach that. Two intents halves it, and both die. Business first, on purpose.</p></div>' +
-      '<div class="opts" style="margin-top:24px">' +
-        '<button class="opt" type="button" id="gList"><span class="tick">→</span>' +
-          '<span><strong>Put me on the list for it</strong><span>You get a message the day that deck opens in your city</span></span></button>' +
-        '<button class="opt" type="button" id="gBiz"><span class="tick">→</span>' +
-          '<span><strong>Fine, deal me the business deck</strong><span>16 cards are live right now</span></span></button>' +
-      '</div>' +
-      '<div class="obfoot"><span class="label">Waiting room</span>' +
-        '<button class="ghost" type="button" id="obBack">Back</button></div>';
-    document.getElementById("gList").addEventListener("click", ()=>{
-      toast("On the list. We will not email you about anything else.");
-    });
-    document.getElementById("gBiz").addEventListener("click", ()=>{
-      ob.mode = "business"; ob.gate = null; ob.a = {}; ob.step = 1; renderOb();
-    });
-    document.getElementById("obBack").addEventListener("click", ()=>{ ob.gate = null; renderOb(); });
-    return;
-  }
-
-  if(ob.step === 0){
-    obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
-      '<h2>What are you here for?</h2>' +
-      '<p class="sub">This is the only answer you cannot soften later. It decides whose deck you appear in — and whose you never do.</p>' +
-      '<div class="opts">' +
-      '<button class="opt big" type="button" data-m="business"><span class="tick">1</span>' +
-        '<span><strong>Business</strong><span>Customers, partners, capital, hires. You will never be shown to someone who came here to date.</span></span></button>' +
-      '<button class="opt big" type="button" data-m="social"><span class="tick">2</span>' +
-        '<span><strong>Just meet people</strong><span>Friends, something to do, or dating.</span></span></button>' +
-      '<button class="opt big" type="button" data-m="both"><span class="tick">3</span>' +
-        '<span><strong>Both, honestly</strong><span>Two cards, two decks, no bleed between them.</span></span></button>' +
-      '</div>' +
-      '<div class="wall"><span class="label">The wall</span><p>Business and Social are two separate decks with no bridge between them. Someone who picked Business is never shown a dating card and never appears in one. Mixed intent in a single pile is what killed every app that tried this before.</p></div>' +
-      '<div class="peek"><div>F</div><div>O</div><div>C</div><div>M</div><div>X</div></div>';
-    obEl.querySelectorAll("[data-m]").forEach(b=>b.addEventListener("click",()=>{
-      const m = b.dataset.m;
-      if(m === "business"){ ob.mode = "business"; ob.gate = null; ob.a = {}; ob.step = 1; }
-      else { ob.gate = m; }
-      renderOb();
-    }));
-    return;
-  }
-
-  if(ob.step <= flow.length){
-    const k = flow[ob.step-1], q = Q[k];
+  if(ob.step < flow.length){
+    const k = flow[ob.step], q = Q[k];
     obEl.innerHTML = '<div class="dots">' + dots + '</div>' +
       '<h2>' + q.t + '</h2><p class="sub">' + q.s + '</p>' +
       '<div class="opts">' + q.o.map((o,i)=>
         '<button class="opt" type="button" data-o="' + o.id + '"><span class="tick">' + (i+1) + '</span>' +
         '<span><strong>' + o.l + '</strong>' + (o.d ? '<span>' + o.d + '</span>' : '') + '</span></button>').join("") +
       '</div>' +
-      '<div class="obfoot"><span class="label">Step ' + ob.step + ' of ' + (total-1) + '</span>' +
-        '<button class="ghost" type="button" id="obBack">Back</button></div>';
+      '<div class="obfoot"><span class="label">Step ' + (ob.step+1) + ' of ' + flow.length + '</span>' +
+        (ob.step ? '<button class="ghost" type="button" id="obBack">Back</button>' : '') + '</div>';
     obEl.querySelectorAll("[data-o]").forEach(b=>b.addEventListener("click",()=>{
       ob.a[k] = b.dataset.o; ob.step++; renderOb();
     }));
-    document.getElementById("obBack").addEventListener("click",()=>{ ob.step--; renderOb(); });
+    const back = document.getElementById("obBack");
+    if(back) back.addEventListener("click",()=>{ ob.step--; renderOb(); });
     return;
   }
 
@@ -884,7 +812,7 @@ function renderOb(){
     '<h2>This is your card</h2>' +
     '<p class="sub">Written from your answers. No photo, no name, no company logo — the only things anyone can judge you on are below.</p>' +
     '<div class="preview"><article class="card r-common">' + cardHTML(card, true) + '</article></div>' +
-    '<div class="selfnote"><p><b>Business pool.</b> You will only ever be shown people who also came here for business, and only they will be shown you. Change that answer and you get a different card in a different deck.</p></div>' +
+    '<div class="selfnote"><p><b>Nobody sees more than this.</b> Not your name, not your face, not where you work. If someone trades with you, they did it on the three lines above — which is the only kind of yes worth having.</p></div>' +
     '<div class="cityrow"><span class="label">Where are you</span>' +
       '<select id="obCity">' + CITIES.map(c=>'<option' + (c===ob.city?" selected":"") + '>' + c + '</option>').join("") + '</select></div>' +
     '<div class="obfoot"><span class="label">Last step</span>' +
@@ -894,15 +822,15 @@ function renderOb(){
   document.getElementById("obCity").addEventListener("change", e=>{ ob.city = e.target.value; renderOb(); });
   document.getElementById("obBack").addEventListener("click",()=>{ ob.step--; renderOb(); });
   document.getElementById("obGo").addEventListener("click",()=>{
-    state.profile = {mode:ob.mode, card:buildCard(), answers:Object.assign({}, ob.a), city:ob.city};
+    state.profile = {card:buildCard(), answers:Object.assign({}, ob.a), city:ob.city};
     state.done = {}; state.got = []; state.xp = 0; state.lastSet = null;
     history = []; save(); showApp();
-    toast("You are in the business pool. 16 cards on the table.");
+    toast("Dealt in. Sixteen cards on the table.");
   });
 }
 
 function showOnboarding(){
-  ob = {step:0, mode:null, gate:null, a:{}, city:(state.profile ? state.profile.city : CITIES[0])};
+  ob = {step:0, a:{}, city:(state.profile ? state.profile.city : CITIES[0])};
   obEl.hidden = false; appEl.hidden = true;
   document.getElementById("editBtn").hidden = !state.profile;
   renderOb();
@@ -911,10 +839,7 @@ function showOnboarding(){
 function showApp(){
   obEl.hidden = true; appEl.hidden = false;
   document.getElementById("editBtn").hidden = false;
-  const pf = state.profile, n = poolPeople().length;
-  document.getElementById("poolBar").innerHTML =
-    '<span class="badge business">Business pool</span>' +
-    '<p>' + n + ' people answered the first question the same way you did. Nobody who came here to date can see your card, and you will never see theirs.</p>';
+  const pf = state.profile;
   document.getElementById("myAlias").textContent = pf.card.alias;
   document.getElementById("myRole").textContent = pf.card.role;
   document.getElementById("myAv").textContent = "YOU";
